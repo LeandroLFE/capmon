@@ -1,0 +1,8 @@
+*.db
+pyvenv.cfg
+
+__pycache__/
+.vscode/
+venv/
+
+
