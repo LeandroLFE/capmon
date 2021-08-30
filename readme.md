@@ -1,6 +1,6 @@
-#**Projeto Capmon - PT-BR**
+**Projeto Capmon - PT-BR**
 
-##Bem vindos ao projeto Capmon!
+# Bem vindos ao projeto Capmon!
 
 O Capmon é um bot desenvolvido para ser um mini-game de chat na plataforma Twitch onde hordas ocorrem de tempos em tempos nos canais ativos, onde viewers, também chamados Capaventureiros possuem a capacidade de tentar capturar estas criaturas utilizando comandos especificos. Com base no armazenamento das informações das criaturas capturadas, o funcionamento do bot estende-se a novas funções tais como:
 
@@ -11,17 +11,19 @@ O Capmon é um bot desenvolvido para ser um mini-game de chat na plataforma Twit
  - Utilização dos capbuddies em batalhas contra outros viewers do chat
  - Os capbuddies também são utilizados nas Capraids, onde uma criatura lendaria aparece para o chat tentar derrotar, ganhando capcoins, a chance de capturar a criatura lendária e pode ter a sorte de ganhar um item chamado capmove. 
 
-No canal do bot [Capmon](https://www.twitch.tv/capmon) tem uma descrição mais detalhada de cada comando
+No canal do bot https://www.twitch.tv/capmon tem uma descrição mais detalhada de cada comando
 
 
-##Desenvolvedor:
+## Desenvolvedor:
 
-LeandroLFE [LFEPLay] (https://www.twitch.tv/lfeplay)
+LeandroLFE https://www.twitch.tv/lfeplay
 
 
-#Instalação
+# Instalação
 
-##pip3 install -r requirements.txt
+```
+pip3 install -r requirements.txt
+```
 
 Necessário arquivo .env na raiz do projeto contendo:
 
@@ -36,9 +38,9 @@ DB_NAME=db_name
 DB_LOCATION=db_location
 ```
 
-Tutorial iniciante para obter Client_ID e Client_secret na Twitch (inglês) [link] (https://dev.twitch.tv/docs/api)
+Tutorial iniciante para obter Client_ID e Client_secret na Twitch (inglês) https://dev.twitch.tv/docs/api
 
-Entendendo mais sobre autenticação e geração do OAUTH token (inglês) [link] (https://dev.twitch.tv/docs/authentication#registration)
+Entendendo mais sobre autenticação e geração do OAUTH token (inglês) https://dev.twitch.tv/docs/authentication#registration
 
 Escopos necessários:
 
@@ -47,13 +49,15 @@ Escopos necessários:
  - whispers:edit
  - whispers:read
 
-*Para enviar whispers eu tive que enviar um formulário para aumentar o limite do que o bot pode fazer, cumprindo seus respectivos requisitos: [link] (https://dev.twitch.tv/limit-increase)
+* Para enviar whispers eu tive que enviar um formulário para aumentar o limite do que o bot pode fazer, cumprindo seus respectivos requisitos: https://dev.twitch.tv/limit-increase
 
 Este projeto utiliza a biblioteca Twitchio v2.0.6 que realiza a comunicação com a Twitch.
-Documentação (inglês) [link] (https://twitchio.readthedocs.io/en/latest/quickstart.html)
+Documentação (inglês) https://twitchio.readthedocs.io/en/latest/quickstart.html
 
 
-#**Capmon Project - ENGLISH**
+**Capmon Project - English**
+
+# Welcome to Capmon project!
 
 Capmon is a bot developed to be a mini chat game on the Twitch platform where hordes occur from time to time on the active channels, where viewers, also called Capadventurers have the ability to try to capture these creatures using specific commands. Based on storing the information of the captured creatures, the functioning of the bot extends to new functions such as:
 
@@ -64,17 +68,22 @@ Capmon is a bot developed to be a mini chat game on the Twitch platform where ho
    - Use of capbuddies on condition against other chat viewers
    - Capbuddies are also used in Capraids, where a legendary creature appears and the chat try to defeat it, earning capcoins, a chance to capture the legendary creature and may be lucky enough to win an item called capmove.
 
-
-##Desenvolvedor:
-
-LeandroLFE [LFEPLay] (https://www.twitch.tv/lfeplay)
+In the bot channel https://www.twitch.tv/capmon there is a more detailed description of each command.
 
 
-#Instalation
+## Developer:
 
-##pip3 install -r requirements.txt
+LeandroLFE https://www.twitch.tv/lfeplay
+
+
+# Instalation
+
+```
+ pip3 install -r requirements.txt
+```
 
 .env file is needed in project root that contains:
+
 
 ```
 CLIENT_ID=twitch_client_id
@@ -87,9 +96,9 @@ DB_NAME=db_name
 DB_LOCATION=db_location
 ```
 
-Getting started to get Client_ID and Client_secret in Twitch [link] (https://dev.twitch.tv/docs/api)
+Getting started to get Client_ID and Client_secret in Twitch https://dev.twitch.tv/docs/api
 
-More about auth process and generating OAUTH token [link] (https://dev.twitch.tv/docs/authentication#registration)
+More about auth process and generating OAUTH token https://dev.twitch.tv/docs/authentication#registration
 
 Scopes required:
 
@@ -98,10 +107,10 @@ Scopes required:
  - whispers:edit
  - whispers:read
 
-*To be able to send whispers I had to fill this form, fulfilling their respective requirements : [link] (https://dev.twitch.tv/limit-increase)
+*To be able to send whispers I had to fill this form, fulfilling their respective requirements : https://dev.twitch.tv/limit-increase
 
 This project uses the Twitchio v2.0.6 library that communicates with Twitch.
-Documentation [link] (https://twitchio.readthedocs.io/en/latest/quickstart.html)
+Documentation https://twitchio.readthedocs.io/en/latest/quickstart.html
 
 
 
