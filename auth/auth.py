@@ -9,4 +9,4 @@ nick = getenv('BOT_USERNAME')
 db_name = getenv('DB_NAME')
 db_location = getenv('DB_LOCATION')
 prefix = '!'
-initial_channels = ["capmon"]
+initial_channels = [nick]
