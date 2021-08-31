@@ -1,10 +1,11 @@
 from bot.botBase import BotBase as Bot
 from bot.utils.envia_msg.envia_msg_chat import Envia_Msg
-
+from bot.cogs.commands.bot_channel.capaventura import Capaventura
 from bot.cogs.events.eventReady import EventReady
 
 cogs = []
 cogs.append(EventReady)
+cogs.append(Capaventura)
 
 def prepare(bot: Bot, send_msg: Envia_Msg ,cogs: list):
     for cog in cogs:

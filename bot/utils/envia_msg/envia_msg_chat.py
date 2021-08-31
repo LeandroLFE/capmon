@@ -22,7 +22,7 @@ class Envia_Msg:
             "nome_canal" : parametros["channel_name"]
         })
 
-        parametros["canal_id"] = _channel_id["Canal_ID"] if _channel_id != None else ctx.author.id
+        parametros["canal_id"] = _channel_id["canal_id"] if _channel_id != None else ctx.author.id
         parametros["msg"] = msg
         
         _ultima_msg = await self.db.consulta_ultima_msg(parametros)

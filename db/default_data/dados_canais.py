@@ -6,7 +6,7 @@ script_create_table_canais = lambda dados = {} : """
         nome_canal text NOT NULL,
         idioma int NOT NULL,
         ativo int NOT NULL,
-        perfil_vantagens_subs int NOT NULL,
+        perfil_vantagens_subs int NOT NULL DEFAULT 1,
         parametros_capboard int NOT NULL DEFAULT 1,
         parametros_hordas int NOT NULL DEFAULT 1,
         parametros_aventureiros int NOT NULL DEFAULT 1,

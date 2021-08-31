@@ -9,3 +9,17 @@ script_create_table_tipo_itens = lambda dados = {} : """
             REFERENCES Canais(canal_id)
     );
 """
+
+script_insert_table_tipo_itens = lambda dados = {} : """
+    INSERT INTO Tipo_itens (id, canal_id)
+    VALUES (:tipo_itens_id, :canal_id)
+"""
+
+dados_padrao_tabela_tipo_itens = lambda dados = {} : [{    
+    "tipo_itens_id" : 1,
+    "canal_id" : dados["canal_id"]
+},{
+    "tipo_itens_id" : 2,
+    "canal_id" : dados["canal_id"]
+}, 
+]

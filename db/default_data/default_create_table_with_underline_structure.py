@@ -13,7 +13,13 @@ default_create_table_structure_items_obtidos = lambda dados = {} : f"""
     data_expiracao date NOT NULL default Now,
 
     FOREIGN KEY (aventureiro_id)
-        REFERENCES Aventureiros_{dados["canal_id"]}(aventureiro_id)
+        REFERENCES Aventureiros_{dados["canal_id"]}(aventureiro_id),
+    FOREIGN KEY (tipo_item)
+        REFERENCES Tipo_itens (id),
+    FOREIGN KEY (id_item)
+        REFERENCES itens_capraid(id),
+    FOREIGN KEY (id_item)
+        REFERENCES itens_capshop(id)
 """
 
 default_create_table_structure_capboard_dados = lambda dados = {} : f"""

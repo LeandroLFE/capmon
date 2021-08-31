@@ -62,6 +62,7 @@ script_create_table_parametros_aventureiros = lambda dados = {} : """
 
     CREATE TABLE Parametros_aventureiros (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        capcoins_iniciais int NOT NULL,
         cont_hordas_para_add_capcoins int NOT NULL,
         cont_sequencia_para_add_capcoins_bonus int NOT NULL,
         add_capcoins_min int NOT NULL,
@@ -72,14 +73,15 @@ script_create_table_parametros_aventureiros = lambda dados = {} : """
 """
 
 script_insert_table_parametros_aventureiros = lambda dados = {} : """
-    INSERT INTO Parametros_aventureiros (cont_hordas_para_add_capcoins, cont_sequencia_para_add_capcoins_bonus,
+    INSERT INTO Parametros_aventureiros (capcoins_iniciais, cont_hordas_para_add_capcoins, cont_sequencia_para_add_capcoins_bonus,
     add_capcoins_min, add_capcoins_max, add_capcoins_bonus_min, add_capcoins_bonus_max
     ) 
-    VALUES (:cont_hordas_para_add_capcoins, :cont_sequencia_para_add_capcoins_bonus,
+    VALUES (:capcoins_iniciais, :cont_hordas_para_add_capcoins, :cont_sequencia_para_add_capcoins_bonus,
     :add_capcoins_min, :add_capcoins_max, :add_capcoins_bonus_min, :add_capcoins_bonus_max );
 """
 
-dados_padrao_tabela_parametros_aventureiros = lambda dados = {} : {    
+dados_padrao_tabela_parametros_aventureiros = lambda dados = {} : {
+    "capcoins_iniciais" : 100,    
     "cont_hordas_para_add_capcoins" : 5,
     "cont_sequencia_para_add_capcoins_bonus" : 5,
     "add_capcoins_min" : 3,

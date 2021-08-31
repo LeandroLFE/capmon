@@ -6,8 +6,9 @@ from db.default_data.dados_vantagens_subs_perfis import script_create_table_vant
 from db.default_data.dados_tipos import script_create_table_tipos, script_insert_table_tipos, dados_padrao_tabela_tipos
 from db.default_data.dados_idiomas import script_create_table_idiomas, script_insert_table_idiomas, dados_padrao_tabela_idiomas
 from db.default_data.dados_tipo_itens import script_create_table_tipo_itens
-from db.default_data.dados_itens_capshop import script_create_table_itens_capshop
-from db.default_data.dados_itens_capraid import script_create_table_itens_capraid
+from db.default_data.dados_comandos_uso_itens_capshop import script_create_table_comandos_uso_itens_capshop, script_insert_table_comandos_uso_itens_capshop, dados_padrao_tabela_comandos_uso_itens_capshop
+from db.default_data.dados_itens_capshop import script_create_table_itens_capshop, script_insert_table_itens_capshop, dados_padrao_tabela_itens_capshop
+from db.default_data.dados_itens_capraid import script_create_table_itens_capraid, script_insert_table_itens_capraid, dados_padrao_tabela_itens_capraid
 from db.default_data.dados_tipos_hordas import script_create_table_tipo_hordas, script_insert_table_tipo_hordas, dados_padrao_tabela_tipo_hordas
 from db.default_data.dados_hordas import script_create_table_hordas
 from db.default_data.dados_atributos import script_create_table_atributos, script_insert_table_atributos, dados_padrao_tabela_atributos
@@ -52,14 +53,29 @@ class Setup():
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
+    def create_table_comandos_uso_itens_capshop(self, dados={}):
+        return script_create_table_comandos_uso_itens_capshop()
+
+    @db.insert_table_many_lines
+    def insert_table_comandos_uso_itens_capshop(self, dados : dict = {}):
+        return script_insert_table_comandos_uso_itens_capshop()
+
+    @db.create_or_drop_table
     def create_table_itens_capshop(self, dados={}):
         return script_create_table_itens_capshop()
+
+    @db.insert_table_many_lines
+    def insert_table_itens_capshop(self, dados : dict = {}):
+        return script_insert_table_itens_capshop()
 
     @db.create_or_drop_table
     def create_table_itens_capraid(self, dados={}):
         return script_create_table_itens_capraid()
 
-    
+    @db.insert_table_many_lines
+    def insert_table_itens_capraid(self, dados : dict = {}):
+        return script_insert_table_itens_capraid()
+
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
@@ -172,18 +188,24 @@ if __name__ == "__main__":
     setup_obj.insert_table_idiomas(dados_padrao_tabela_idiomas())
 
     setup_obj.create_table_tipo_itens()
-    
-    setup_obj.create_table_itens_capshop()
-
-    setup_obj.create_table_itens_capraid()
 
     setup_obj.create_table_tipo_hordas()
     setup_obj.insert_table_tipo_hordas(dados_padrao_tabela_tipo_hordas())
 
     setup_obj.create_table_hordas()
 
+    setup_obj.create_table_comandos_uso_itens_capshop()
+    setup_obj.insert_table_comandos_uso_itens_capshop(dados_padrao_tabela_comandos_uso_itens_capshop())
+    
+    setup_obj.create_table_itens_capshop()
+    setup_obj.insert_table_itens_capshop(dados_padrao_tabela_itens_capshop())
+
+    setup_obj.create_table_itens_capraid()
+    setup_obj.insert_table_itens_capraid(dados_padrao_tabela_itens_capraid())
+
     setup_obj.create_table_vantagens_subs_perfis()
     setup_obj.insert_table_vantagens_subs_perfis(dados_padrao_tabela_vantagens_subs())
+
 
     '''
     Parametros:
