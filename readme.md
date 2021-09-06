@@ -55,6 +55,12 @@ Este projeto utiliza a biblioteca Twitchio v2.0.6 que realiza a comunicação co
 Documentação (inglês) https://twitchio.readthedocs.io/en/latest/quickstart.html
 
 
+# Execução
+
+- Arquivo setup_db.py -> setup do banco de dados
+- Arquivo capmon.py -> execução do bot
+
+
 **Capmon Project - English**
 
 # Welcome to Capmon project!
@@ -113,4 +119,7 @@ This project uses the Twitchio v2.0.6 library that communicates with Twitch.
 Documentation https://twitchio.readthedocs.io/en/latest/quickstart.html
 
 
+# Run
 
+- File setup_db.py -> database setup 
+- File capmon.py -> execute bot
