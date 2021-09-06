@@ -1,5 +1,5 @@
 async def capaventura_language(self, ctx, _opt):
-    _aventureiro = self.remover_acentos(ctx.author.name)
+    _aventureiro = self.bot.remover_acentos(ctx.author.name)
     _canal_id = ctx.message.tags["user-id"]
 
     aventureiro = await self.db.consulta_canal_dado_um_id({
@@ -9,7 +9,7 @@ async def capaventura_language(self, ctx, _opt):
     _idioma_valido = [i["nome"] for i in self.idiomas if i["nome"] == _opt]
 
     if aventureiro == None or aventureiro["ativo"] == 0 or _idioma_valido == []:
-        self.error_messages = self.import_message_language_by_one("english", 
+        self.error_messages = self.bot.import_message_language_by_one("english", 
             "bot_channel", "capmon_channel_messages", "capmon_channel_messages_error", 
             {
                 "aventureiro":_aventureiro,
@@ -18,11 +18,11 @@ async def capaventura_language(self, ctx, _opt):
             })
 
         if aventureiro == None:
-            await self.send_msg.envia_msg_with_context(ctx, self.error_messages["language_stop"])
+            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_stop"])
         elif  aventureiro["ativo"] == 0:
-            await self.send_msg.envia_msg_with_context(ctx, self.error_messages["language_inactive"])
+            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_inactive"])
         else:
-            await self.send_msg.envia_msg_with_context(ctx, self.error_messages["language_invalid"])
+            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_invalid"])
         return
 
     dados = {
@@ -34,8 +34,8 @@ async def capaventura_language(self, ctx, _opt):
 
     await self.db.update_canais(dados)
     
-    self.messages = self.import_message_language_by_one(dados["nome_idioma"], 
+    self.messages = self.bot.import_message_language_by_one(dados["nome_idioma"], 
     "bot_channel", "capmon_channel_messages", "capmon_channel_messages_normal", 
     {"aventureiro":_aventureiro})
 
-    await self.send_msg.envia_msg_with_context(ctx, self.messages["language"])
+    await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.messages["language"])

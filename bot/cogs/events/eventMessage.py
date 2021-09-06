@@ -1,10 +1,10 @@
 from typing import Callable
-from twitchio.ext.commands import Bot, Cog
+from twitchio.ext.commands import Cog
 from twitchio import Message
 from utils.removedor_acentos import remover_acentos
 
 class EventMessage(Cog):
-    def __init__(self, bot: Callable, send_msg : Callable = None):
+    def __init__(self, bot: Callable):
         super().__init__()
         self.bot = bot
 

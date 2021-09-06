@@ -10,7 +10,7 @@ Requer: {
 }
 '''
 
-update_aventureiros = lambda dados = {}  : f"""
+script_update_aventureiros_canal = lambda dados = {}  : f"""
     UPDATE Aventureiros_{dados["canal_id"]} 
     SET nome = :aventureiro_nome , 
     capcoins = :aventureiro_capcoins ,
@@ -27,7 +27,7 @@ Requer: {
 }
 '''
 
-update_aventureiros_parametros = lambda dados = {} : f"""
+script_update_aventureiros_parametros = lambda dados = {} : f"""
     UPDATE Aventureiros_{dados["canal_id"]} 
     SET parametros_aventureiro = :parametros_aventureiro
     WHERE aventureiro_id = :aventureiro_id;

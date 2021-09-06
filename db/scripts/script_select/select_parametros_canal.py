@@ -62,10 +62,10 @@ select_parametros_hordas_canal = lambda dados = "" : """
     Ph.tempo_horda_min, Ph.tempo_horda_max, 
     Ph.tempo_entre_hordas_min, Ph.tempo_entre_hordas_max, 
     Ph.aviso_horda_terminando_em_x_segundos,
-    Ph.faixa_pessoas_na_live_pequeno, Ph.fator_cp_boss_capraid_live_pequeno, 
-    Ph.faixa_pessoas_na_live_medio, Ph.fator_cp_boss_capraid_live_medio, 
-    Ph.faixa_pessoas_na_live_grande, Ph.fator_cp_boss_capraid_live_grande,
-    Ph.fator_cp_boss_capraid_live_muito_grande 
+    Ph.faixa_pessoas_live_pequeno, Ph.fator_cp_boss_capraid_live_pequeno_percent, 
+    Ph.faixa_pessoas_live_medio, Ph.fator_cp_boss_capraid_live_medio_percent, 
+    Ph.faixa_pessoas_live_grande, Ph.fator_cp_boss_capraid_live_grande_percent,
+    Ph.fator_cp_boss_capraid_live_muito_grande_percent 
     FROM Canais
     INNER JOIN Parametros_hordas as Ph
     ON Canais.parametros_hordas = Ph.id

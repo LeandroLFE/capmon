@@ -1,9 +1,9 @@
 from typing import Callable
-from utils.removedor_acentos import remover_acentos
-from bot.utils.envia_msg.envia_msg_aux.envia_msg_chat_db_connect import Envia_MSG_Chat_DB_Connect
-from datetime import datetime
 
-class Envia_Msg:
+from twitchio.ext.commands.meta import Cog
+from bot.methods.envia_msg.envia_msg_aux.envia_msg_chat_db_connect import Envia_MSG_Chat_DB_Connect
+
+class Envia_Msg(Cog):
 
     def __init__(self, bot: Callable) -> None:
         self.bot = bot
@@ -33,11 +33,11 @@ class Envia_Msg:
             print(f"Tipo errado ultima_msg: {type(_ultima_msg)}")
             return
 
-        if _ultima_msg == None or (remover_acentos(msg) != remover_acentos(_ultima_msg)):
+        if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
             await ctx.send(msg)
             await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)
         else:
-            data_e_hora_atuais = datetime.now()
+            data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
             msg_modificada = f'{msg} ({data_e_hora_em_texto})'
             await ctx.send(msg_modificada)
@@ -60,11 +60,11 @@ class Envia_Msg:
         parametros["msg"] = msg
         _ultima_msg = await self.db.consulta_ultima_msg(parametros)
 
-        if _ultima_msg == None or (remover_acentos(msg) != remover_acentos(_ultima_msg)):
+        if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
             await self.bot._ws.send_privmsg(channel_name, msg)
             await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)    
         else:
-            data_e_hora_atuais = datetime.now()
+            data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
             msg = f'{msg} ({data_e_hora_em_texto})'
 

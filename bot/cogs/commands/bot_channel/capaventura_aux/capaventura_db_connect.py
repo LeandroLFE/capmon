@@ -1,13 +1,16 @@
 from db.connect.instanciaAtualDB import atualDB
 from db.scripts.script_select.select_canais import select_verifica_canal, select_canais_ativos
 from db.scripts.script_select.select_aventureiros import select_aventureiro_nome, select_aventureiro_id
-from db.scripts.script_create_drop.create_tables import create_aventureiros_canal, create_buddies_canal, create_capturados_canal, create_capboard_dados_canal, create_itens_obtidos_canal
-from db.scripts.script_create_drop.drop_tables import drop_table_aventureiros_canal, drop_table_buddies_canal, drop_table_capturados_canal, drop_capboard_dados_canal, drop_itens_obtidos_canal
+from db.scripts.script_create_drop.create_tables import create_aventureiros_canal, create_buddies_canal, create_capturados_canal, create_tipo_hordas_canal, create_hordas_canal, create_capboard_dados_canal, create_itens_obtidos_canal
+from db.scripts.script_create_drop.drop_tables import drop_table_aventureiros_canal, drop_table_buddies_canal, drop_table_capturados_canal, drop_tipo_hordas_canal,drop_hordas_canal, drop_capboard_dados_canal, drop_itens_obtidos_canal
 from db.scripts.script_insert_update_delete.update_insert_canais import script_insert_canais, script_update_canais 
+from db.scripts.script_insert_update_delete.insert_update_tipo_hordas_canal import script_insert_table_tipo_hordas_canal 
+from db.scripts.script_insert_update_delete.insert_update_hordas_canal import script_insert_table_hordas_canal
 from db.scripts.script_insert_update_delete.insert_aventureiros import script_insert_aventureiros
+from db.scripts.script_insert_update_delete.update_aventureiros import script_update_aventureiros_canal, script_update_aventureiros_parametros
 from db.scripts.script_select.select_idiomas import script_select_todos_idiomas, script_select_idioma_por_nome
 from db.scripts.script_insert_update_delete.insert_tipo_itens import script_insert_tipo_itens
-from db.scripts.script_select.select_parametros_canal import select_parametros_aventureiros_novo_canal
+from db.scripts.script_select.select_parametros_canal import select_parametros_aventureiros_novo_canal, select_parametros_hordas_canal
 
 class Capaventura_DB_Connect():
 
@@ -28,6 +31,11 @@ class Capaventura_DB_Connect():
     async def consulta_parametros_aventureiros_novo_canal(self, dados ={}):
         _select_parametros_aventureiros_novo_canal = select_parametros_aventureiros_novo_canal()
         return _select_parametros_aventureiros_novo_canal
+
+    @atualDB.select_table_one_data
+    async def consulta_parametros_hordas_canal(self, dados ={}):
+        _consulta_parametros_hordas_canal = select_parametros_hordas_canal()
+        return _consulta_parametros_hordas_canal
 
     @atualDB.select_table_one_data
     async def consulta_aventureiro_por_nome(self, dados ={}):
@@ -69,12 +77,27 @@ class Capaventura_DB_Connect():
         _insert_aventureiros = script_insert_aventureiros(dados)
         return _insert_aventureiros
 
+    @atualDB.update_table
+    async def update_aventureiro_canal(self, dados ={}):
+        _update_aventureiro_canal = script_update_aventureiros_canal(dados)
+        return _update_aventureiro_canal
+
+    @atualDB.insert_table_many_lines
+    async def insert_tipo_hordas_canal(self, dados ={}):
+        _insert_tipo_hordas_canal = script_insert_table_tipo_hordas_canal(dados)
+        return _insert_tipo_hordas_canal
+
+    @atualDB.insert_table_one_line
+    async def insert_hordas_canal(self, dados={}):
+        _insert_hordas_canal = script_insert_table_hordas_canal(dados)
+        return _insert_hordas_canal
+
     @atualDB.create_or_drop_table
     async def create_tables_with_underline_adventurer_name(self, dados={}):
-        _create_tables = create_aventureiros_canal(dados) + create_buddies_canal(dados) + create_capturados_canal(dados) + create_itens_obtidos_canal(dados) + create_capboard_dados_canal(dados)
+        _create_tables = create_aventureiros_canal(dados) + create_buddies_canal(dados) + create_capturados_canal(dados) + create_tipo_hordas_canal(dados) + create_hordas_canal(dados) + create_itens_obtidos_canal(dados) + create_capboard_dados_canal(dados)
         return _create_tables
 
     @atualDB.create_or_drop_table
     async def drop_tables_with_underline_adventurer_name(self, dados={}):
-        _drop_tables = drop_capboard_dados_canal(dados) + drop_itens_obtidos_canal(dados) + drop_table_capturados_canal(dados) + drop_table_buddies_canal(dados) + drop_table_aventureiros_canal(dados)
+        _drop_tables = drop_capboard_dados_canal(dados) + drop_itens_obtidos_canal(dados) + drop_hordas_canal(dados) + drop_tipo_hordas_canal(dados) + drop_table_capturados_canal(dados) + drop_table_buddies_canal(dados) + drop_table_aventureiros_canal(dados)
         return _drop_tables

@@ -9,8 +9,7 @@ from db.default_data.dados_tipo_itens import script_create_table_tipo_itens
 from db.default_data.dados_comandos_uso_itens_capshop import script_create_table_comandos_uso_itens_capshop, script_insert_table_comandos_uso_itens_capshop, dados_padrao_tabela_comandos_uso_itens_capshop
 from db.default_data.dados_itens_capshop import script_create_table_itens_capshop, script_insert_table_itens_capshop, dados_padrao_tabela_itens_capshop
 from db.default_data.dados_itens_capraid import script_create_table_itens_capraid, script_insert_table_itens_capraid, dados_padrao_tabela_itens_capraid
-from db.default_data.dados_tipos_hordas import script_create_table_tipo_hordas, script_insert_table_tipo_hordas, dados_padrao_tabela_tipo_hordas
-from db.default_data.dados_hordas import script_create_table_hordas
+from db.default_data.dados_tipo_hordas import script_create_table_tipo_hordas, script_insert_table_tipo_hordas, dados_padrao_tabela_tipo_hordas
 from db.default_data.dados_atributos import script_create_table_atributos, script_insert_table_atributos, dados_padrao_tabela_atributos
 from db.default_data.dados_efetividades import script_create_table_efetividades, script_insert_table_efetividades, dados_padrao_tabela_efetividades
 from db.default_data.dados_criaturas import script_create_table_criaturas, script_insert_table_criaturas, dados_padrao_tabela_criaturas
@@ -43,12 +42,6 @@ class Setup():
     @db.insert_table_many_lines
     def insert_table_tipo_hordas(self, dados : dict = {}):
         return script_insert_table_tipo_hordas()
-
-    '''----------------------------------------------------------------'''
-
-    @db.create_or_drop_table
-    def create_table_hordas(self, dados={}):
-        return script_create_table_hordas()
 
     '''----------------------------------------------------------------'''
 
@@ -191,8 +184,6 @@ if __name__ == "__main__":
 
     setup_obj.create_table_tipo_hordas()
     setup_obj.insert_table_tipo_hordas(dados_padrao_tabela_tipo_hordas())
-
-    setup_obj.create_table_hordas()
 
     setup_obj.create_table_comandos_uso_itens_capshop()
     setup_obj.insert_table_comandos_uso_itens_capshop(dados_padrao_tabela_comandos_uso_itens_capshop())

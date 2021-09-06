@@ -36,6 +36,24 @@ default_create_table_structure_buddies = lambda dados = {} : """
     cont_Hordas_atual int NOT NULL DEFAULT 0
 """
 
+
+default_create_table_structure_tipo_horda = lambda dados = {} : """
+    id INTEGER NOT NULL PRIMARY KEY,
+    nome text NOT NULL,
+    prioridade int NOT NULL DEFAULT 1,
+    percent_atual int NOT NULL DEFAULT 0
+"""
+
+default_create_table_structure_horda = lambda dados = {} : """
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    horda_ativa int NOT NULL DEFAULT 1,
+    tipo_horda int NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (tipo_horda)
+        REFERENCES Tipo_hordas(id)
+"""
+
+
 default_create_table_structure_capturados = lambda dados = {} : """
     id_criatura INTEGER,
     aventureiro_id text,
