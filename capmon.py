@@ -1,9 +1,8 @@
 from bot.botBase import BotBase as Bot
-from bot.cogs.events.geraHordas import GeraHordas
-from bot.cogs.commands.bot_channel.capaventura import Capaventura
-
 from bot.cogs.events.eventReady import EventReady
-from bot.methods.envia_msg.envia_msg_chat import Envia_Msg
+from bot.cogs.envia_msg.envia_msg_chat import Envia_Msg
+from bot.cogs.loop_hordas.geraHordas import GeraHordas
+from bot.cogs.commands.bot_channel.capaventura import Capaventura
 
 cogs = []
 cogs.append(EventReady)

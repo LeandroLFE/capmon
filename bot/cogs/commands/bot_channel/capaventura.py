@@ -1,6 +1,6 @@
 from twitchio.ext.commands import Cog, command
 
-from bot.cogs.messages.general.available_parameter_list.capaventura_parameters import start_parameter_list, language_parameter_list, stop_parameter_list
+from bot.messages.general.available_parameter_list.capaventura_parameters import start_parameter_list, language_parameter_list, stop_parameter_list
 from bot.cogs.commands.bot_channel.capaventura_aux.capaventura_db_connect import Capaventura_DB_Connect
 from bot.cogs.commands.bot_channel.capaventura_aux.capaventura_start import capaventura_start
 from bot.cogs.commands.bot_channel.capaventura_aux.capaventura_stop import capaventura_stop

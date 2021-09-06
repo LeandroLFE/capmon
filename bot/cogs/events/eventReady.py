@@ -1,6 +1,6 @@
 from twitchio.ext.commands import Cog
 from bot.methods.aguarda.aguarda import aguarda
-from bot.methods.nomes_tasks.nomes_tasks import task_nova_horda_sync
+from bot.messages.general.task_names.nomes_tasks import task_nova_horda_sync
 from utils.removedor_acentos import remover_acentos
 from utils.import_message_language import import_message_language_by_one
 

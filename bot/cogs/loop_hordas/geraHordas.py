@@ -1,5 +1,5 @@
 from twitchio.ext.commands import Cog
-from bot.methods.loop_hordas.nova_horda import nova_horda_sync_impl
+from bot.cogs.loop_hordas.geraHordas_aux.nova_horda import nova_horda_impl
 
 class GeraHordas(Cog):
 
@@ -11,4 +11,4 @@ class GeraHordas(Cog):
         if not future.done():
             return
 
-        self.bot.loop.create_task(nova_horda_sync_impl(self, dados, future))
+        self.bot.loop.create_task(nova_horda_impl(self, dados, future))
