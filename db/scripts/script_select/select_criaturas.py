@@ -1,80 +1,162 @@
-select_criatura_aleatoria = lambda idioma : f"""
-    SELECT criaturas.num, criaturas.tipo, criaturas.Nome, criaturas.CP_Min, criaturas.CP_Max, 
-    atr1.Nome_{idioma} AS "Atributo1", atr1.Id as "Ref1", 
-    atr2.Nome_{idioma} AS "Atributo2", atr2.Id as "Ref2", 
-    criaturas.chance_especial, criaturas.forma, criaturas.linha_evolutiva, 
-    criaturas.Custo, criaturas.evolucao, criaturas.CP_limite, criaturas.custo 
-    FROM criaturas 
-    INNER JOIN atributos as atr1 
-    ON criaturas.atributo1 = atr1.Id 
-    AND criaturas.tipo = atr1.tipo 
-    LEFT JOIN atributos AS atr2 
-    ON criaturas.atributo2 = atr2.Id 
-    AND criaturas.tipo = atr2.tipo 
-    WHERE criaturas.forma = 1 
-    AND criaturas.Custo <> 5 
-    ORDER BY RAND() 
+'''
+Requer {
+    "nome_idioma" : str
+}
+'''
+
+select_criatura_aleatoria = lambda dados = {} : f"""
+    SELECT Criaturas.num, Tipos.nome as nome_tipo, Criaturas.Nome, Criaturas.forma,
+    Criaturas.linha_evolutiva,
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Atr1.nome AS "nome_atributo1",
+    Atr2.nome AS "nome_atributo2",
+    Criaturas.chance_especial,  
+    Criaturas.custo, 
+    Criaturas.evolucao, 
+    Criaturas.cp_limite, 
+    Criaturas.evolui 
+    FROM Criaturas 
+    INNER JOIN Tipos
+    ON Criaturas.tipo = Tipos.id
+    INNER JOIN 
+    (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr1
+    ON Criaturas.atributo1 = Atr1.ref 
+    AND Criaturas.tipo = Atr1.tipo 
+    LEFT JOIN (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr2
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr2
+    ON criaturas.atributo2 = Atr2.ref 
+    AND criaturas.tipo = Atr2.tipo 
+    WHERE Criaturas.forma = 1 
+    AND Criaturas.custo <> 5 
+    AND Atr1.nome_idioma_atr1 = :nome_idioma
+    AND Atr2.nome_idioma_atr2 = :nome_idioma
+    ORDER BY RANDOM() 
     LIMIT 1
 """
 
 select_criatura_aleatoria_lendaria = lambda idioma : f"""
-    SELECT criaturas.num, criaturas.tipo, criaturas.Nome, criaturas.CP_Min, criaturas.CP_Max, 
-    atr1.Nome_{idioma} AS "Atributo1", atr1.Id as "Ref1", 
-    atr2.Nome_{idioma} AS "Atributo2", atr2.Id as "Ref2", 
-    criaturas.chance_especial, criaturas.forma, criaturas.linha_evolutiva, 
-    criaturas.Custo, criaturas.evolucao, criaturas.CP_limite, criaturas.custo 
-    FROM criaturas 
-    INNER JOIN atributos as atr1 
-    ON criaturas.atributo1 = atr1.Id 
-    AND criaturas.tipo = atr1.tipo 
-    LEFT JOIN atributos AS atr2 
-    ON criaturas.atributo2 = atr2.Id 
-    AND criaturas.tipo = atr2.tipo 
-    WHERE criaturas.forma = 1 
-    AND criaturas.Custo = 5 
-    ORDER BY RAND() 
-    LIMIT 1;
+    SELECT Criaturas.num, Tipos.nome as nome_tipo, Criaturas.Nome, Criaturas.forma,
+    Criaturas.linha_evolutiva,
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Atr1.nome AS "nome_atributo1",
+    Atr2.nome AS "nome_atributo2",
+    Criaturas.chance_especial,  
+    Criaturas.custo, 
+    Criaturas.evolucao, 
+    Criaturas.cp_limite, 
+    Criaturas.evolui 
+    FROM Criaturas 
+    INNER JOIN Tipos
+    ON Criaturas.tipo = Tipos.id
+    INNER JOIN 
+    (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr1
+    ON Criaturas.atributo1 = Atr1.ref 
+    AND Criaturas.tipo = Atr1.tipo 
+    LEFT JOIN (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr2
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr2
+    ON criaturas.atributo2 = Atr2.ref 
+    AND criaturas.tipo = Atr2.tipo 
+    WHERE Criaturas.forma = 1 
+    AND Criaturas.custo = 5 
+    AND Atr1.nome_idioma_atr1 = :nome_idioma
+    AND Atr2.nome_idioma_atr2 = :nome_idioma
+    LIMIT 1
 """
 
-# Requer nome = { "nome": "Nome_da_criatura"}
-select_criatura_especifica = lambda idioma : f"""
-    SELECT criaturas.num, criaturas.tipo, criaturas.Nome, criaturas.CP_Min, criaturas.CP_Max, 
-    atr1.Nome_{idioma} AS "Atributo1", atr1.Id as "Ref1", 
-    atr2.Nome_{idioma} AS "Atributo2", atr2.Id as "Ref2", 
-    criaturas.chance_especial, criaturas.forma, criaturas.linha_evolutiva, 
-    criaturas.Custo, criaturas.evolucao, criaturas.CP_limite 
-    FROM criaturas 
-    INNER JOIN atributos as atr1 
-    ON criaturas.atributo1 = atr1.Id 
-    AND criaturas.tipo = atr1.tipo 
-    LEFT JOIN atributos AS atr2 
-    ON criaturas.atributo2 = atr2.Id 
-    AND criaturas.tipo = atr2.tipo 
-    WHERE criaturas.forma = 1 
-    AND criaturas.Nome = :nome
-    LIMIT 1;
+# Requer nome = { "id_criatura": "Id_da_criatura"}
+select_criatura_especifica = lambda dados : f"""
+    SELECT Criaturas.num, Tipos.nome as nome_tipo, Criaturas.Nome, Criaturas.forma,
+    Criaturas.linha_evolutiva,
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Atr1.nome AS "nome_atributo1",
+    Atr2.nome AS "nome_atributo2",
+    Criaturas.chance_especial,  
+    Criaturas.custo, 
+    Criaturas.evolucao, 
+    Criaturas.cp_limite, 
+    Criaturas.evolui 
+    FROM Criaturas 
+    INNER JOIN Tipos
+    ON Criaturas.tipo = Tipos.id
+    INNER JOIN 
+    (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr1
+    ON Criaturas.atributo1 = Atr1.ref 
+    AND Criaturas.tipo = Atr1.tipo 
+    LEFT JOIN (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr2
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr2
+    ON criaturas.atributo2 = Atr2.ref 
+    AND criaturas.tipo = Atr2.tipo 
+    WHERE Criaturas.num = :id_criatura
+    AND Tipos.nome = :nome_tipo
+    AND Atr1.nome_idioma_atr1 = :nome_idioma
+    AND Atr2.nome_idioma_atr2 = :nome_idioma
+    LIMIT 1
 """
 
 # Requer custo e ref = { "custo": custo da criatura sorteado, "ref": "Ref do atributo sorteado"}
 select_criaturas_atributo = lambda idioma : f"""
-    SELECT criaturas.num, criaturas.tipo, criaturas.Nome, criaturas.CP_Min, criaturas.CP_Max,
-    atr1.Nome_{idioma} AS "Atributo1", atr1.Id as "Ref1", 
-    atr2.Nome_{idioma} AS "Atributo2", atr2.Id as "Ref2",
-    criaturas.chance_especial, criaturas.forma, criaturas.linha_evolutiva, 
-    criaturas.Custo, criaturas.evolucao, criaturas.CP_limite, criaturas.custo 
-    FROM criaturas 
-    INNER JOIN atributos as atr1 
-    ON criaturas.atributo1 = atr1.Id 
-    AND criaturas.tipo = atr1.tipo 
-    LEFT JOIN atributos AS atr2 
-    ON criaturas.atributo2 = atr2.Id 
-    AND criaturas.tipo = atr2.tipo 
-    WHERE criaturas.forma = 1 
-    AND criaturas.Custo = :custo
-    AND ( 
-    atr1.Id = :ref
-    OR atr2.Id = :ref
-    ) 
-    ORDER BY RAND() 
-    LIMIT 10;
+    SELECT Criaturas.num, Tipos.nome as nome_tipo, Criaturas.Nome, Criaturas.forma,
+    Criaturas.linha_evolutiva,
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Atr1.nome AS "nome_atributo1",
+    Atr2.nome AS "nome_atributo2",
+    Criaturas.chance_especial,  
+    Criaturas.custo, 
+    Criaturas.evolucao, 
+    Criaturas.cp_limite, 
+    Criaturas.evolui 
+    FROM Criaturas 
+    INNER JOIN Tipos
+    ON Criaturas.tipo = Tipos.id
+    INNER JOIN 
+    (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr1
+    ON Criaturas.atributo1 = Atr1.ref 
+    AND Criaturas.tipo = Atr1.tipo 
+    LEFT JOIN (
+    SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr2
+    FROM Atributos 
+    INNER JOIN Idiomas 
+    ON Atributos.idioma = Idiomas.id
+    ) AS Atr2
+    ON criaturas.atributo2 = Atr2.ref 
+    AND criaturas.tipo = Atr2.tipo 
+    WHERE Criaturas.forma = 1 
+    AND Atr1.nome_idioma_atr1 = :nome_idioma
+    AND Atr2.nome_idioma_atr2 = :nome_idioma
+    AND (Atr1.ref = :ref_atributo OR Atr2.ref = :ref_atributo)
+    AND Criaturas.custo = :custo
+    ORDER BY RANDOM() 
+    LIMIT 1
 """ 

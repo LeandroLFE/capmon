@@ -41,30 +41,22 @@ class Envia_Msg(Cog):
             msg_modificada = f'{msg} ({data_e_hora_em_texto})'
             await ctx.send(msg_modificada)
 
-    async def envia_msg_without_context(self, channel_name, msg=''):
-        parametros = {}
+    async def envia_msg_without_context(self, channel_data, msg=''):
+        _msg =  f"""PRIVMSG #{channel_data["nome_canal"]} :{msg}\r\n"""
 
-        parametros["channel_name"] = channel_name 
+        parametros = {
+            "canal_id" : channel_data["canal_id"],
+            "nome_canal" : channel_data["nome_canal"],
+            "msg" : _msg
+        }
 
-        _channel_id = await self.db.consulta_channel_id({
-            "nome_canal" : parametros["channel_name"]
-        })
-
-        if _channel_id != None:
-            parametros["canal_id"] = _channel_id  
-        else:
-            print("Canal inválido") 
-            return
-
-        parametros["msg"] = msg
         _ultima_msg = await self.db.consulta_ultima_msg(parametros)
 
-        if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
-            await self.bot._ws.send_privmsg(channel_name, msg)
+        if _ultima_msg == None or (self.bot.remover_acentos(_msg) != self.bot.remover_acentos(_ultima_msg)):
+            await self.bot._connection.send(_msg)
             await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)    
         else:
             data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
-            msg = f'{msg} ({data_e_hora_em_texto})'
-
-            await self.bot._ws.send_privmsg(channel_name, msg)
+            _msg = f'{_msg} ({data_e_hora_em_texto})'
+            await self.bot._connection.send(_msg)

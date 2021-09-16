@@ -16,9 +16,9 @@ async def capaventura_stop(self, ctx):
             })
 
         if aventureiro == None:
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["stop_not_start"])
+            await self.envia_msg_with_context(ctx, self.error_messages["stop_not_start"])
         else:
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["stop_inactive"])
+            await self.envia_msg_with_context(ctx, self.error_messages["stop_inactive"])
         return
 
     dados = {
@@ -41,4 +41,4 @@ async def capaventura_stop(self, ctx):
 
     await self.db.drop_tables_with_underline_adventurer_name(dados)
     await self.db.update_canais(dados)
-    await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, _messages["stop"])
+    await self.envia_msg_with_context(ctx, _messages["stop"])

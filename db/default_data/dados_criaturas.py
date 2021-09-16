@@ -17,11 +17,13 @@ script_create_table_criaturas = lambda dados = {} : """
         cp_limite int NOT NULL,
         evolui int NOT NULL,
         FOREIGN KEY (tipo)
-            REFERENCES Tipos (id) 
+            REFERENCES Tipos (id), 
         FOREIGN KEY (atributo1)
-            REFERENCES Atributos (ref)
+            REFERENCES Atributos (ref),
         FOREIGN KEY (atributo2)
-            REFERENCES Atributos (ref)
+            REFERENCES Atributos (ref),
+        FOREIGN KEY (custo)
+            REFERENCES Custos(ref),
         PRIMARY KEY (num, tipo)
     );
 """

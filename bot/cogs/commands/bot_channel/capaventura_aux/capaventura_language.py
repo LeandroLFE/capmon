@@ -18,11 +18,11 @@ async def capaventura_language(self, ctx, _opt):
             })
 
         if aventureiro == None:
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_stop"])
+            await self.envia_msg_with_context(ctx, self.error_messages["language_stop"])
         elif  aventureiro["ativo"] == 0:
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_inactive"])
+            await self.envia_msg_with_context(ctx, self.error_messages["language_inactive"])
         else:
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["language_invalid"])
+            await self.envia_msg_with_context(ctx, self.error_messages["language_invalid"])
         return
 
     dados = {
@@ -33,9 +33,9 @@ async def capaventura_language(self, ctx, _opt):
     }
 
     await self.db.update_canais(dados)
-    
+
     self.messages = self.bot.import_message_language_by_one(dados["nome_idioma"], 
     "bot_channel", "capmon_channel_messages", "capmon_channel_messages_normal", 
     {"aventureiro":_aventureiro})
 
-    await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.messages["language"])
+    await self.envia_msg_with_context(ctx, self.messages["language"])

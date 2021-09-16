@@ -14,8 +14,6 @@ async def capaventura_start(self, ctx, idioma_canal):
             "capcoins_iniciais": _parametros_aventureiro["capcoins_iniciais"]
         }
 
-        _parametros_horda = await self.db.consulta_parametros_hordas_canal(dados)
-
         canal = await self.db.consulta_canal_dado_um_id({
             "canal_id" : dados["canal_id"]
         })
@@ -31,13 +29,10 @@ async def capaventura_start(self, ctx, idioma_canal):
             await self.db.insert_canais(dados) if canal == None else await self.db.update_canais(dados)
             await self.db.insert_tipo_hordas_canal(self.dados_padrao_tabela_tipo_hordas(dados))
             await self.db.insert_hordas_canal(dados)
-            await  self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.messages["start"])
-
-            _tempo_para_proxima_horda = self.bot.random_randint(_parametros_horda["tempo_entre_hordas_min"], _parametros_horda["tempo_entre_hordas_max"])
-            _task = self.bot.loop.create_task(self.bot.aguarda(self, _tempo_para_proxima_horda))
-            _nome_task = self.bot.task_nova_horda_sync(dados)  
-            _task.set_name(_nome_task)
-            _task.add_done_callback(self.bot.functools_partial(self.bot.cogs['GeraHordas'].nova_horda_sync, dados))
+            await self.envia_msg_with_context(ctx, self.messages["start"])
+            self.bot.canal_thread = dados["canal_id"]
+            self.bot.idioma_thread = dados["nome_idioma"]
+            await self.bot.join_channels([dados["nome_canal"]])
 
         else:
             self.error_messages = self.bot.import_message_language_by_one(dados["nome_idioma"], 
@@ -47,4 +42,4 @@ async def capaventura_start(self, ctx, idioma_canal):
                 "idiomas": [i["nome"] for i in self.idiomas],
                 "comandos": self.start_parameter_list() + self.language_parameter_list() + self.stop_parameter_list()    
             })
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["start"])
+            await self.envia_msg_with_context(ctx, self.error_messages["start"])

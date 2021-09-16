@@ -1,5 +1,5 @@
 select_canais_ativos = lambda dados = "" : """
-            Select Canal_ID, Aventureiro_index, Nome_canal, Idiomas.nome as idioma, Ativo
+            Select canal_id, nome_canal, Idiomas.nome as idioma, ativo
             FROM canais
             INNER JOIN idiomas
             ON canais.idioma = Idiomas.id

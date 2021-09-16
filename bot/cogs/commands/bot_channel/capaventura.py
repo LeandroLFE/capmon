@@ -22,6 +22,7 @@ class Capaventura(Cog):
         self.language_parameter_list = language_parameter_list
         self.stop_parameter_list = stop_parameter_list
         self.dados_padrao_tabela_tipo_hordas = dados_padrao_tabela_tipo_hordas
+        self.envia_msg_with_context = self.bot.cogs['Envia_Msg'].envia_msg_with_context
 
     @command(name='capaventura', aliases=['capadventure'])
     async def capaventura(self, ctx, _cmd='', _opt=''):
@@ -50,4 +51,4 @@ class Capaventura(Cog):
                 "idiomas": [i["nome"] for i in self.idiomas],
                 "comandos": self.start_parameter_list() + self.language_parameter_list() + self.stop_parameter_list()    
             })
-            await self.bot.cogs['Envia_Msg'].envia_msg_with_context(ctx, self.error_messages["invalid_command"])
+            await self.envia_msg_with_context(ctx, self.error_messages["invalid_command"])

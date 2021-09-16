@@ -33,11 +33,6 @@ class Capaventura_DB_Connect():
         return _select_parametros_aventureiros_novo_canal
 
     @atualDB.select_table_one_data
-    async def consulta_parametros_hordas_canal(self, dados ={}):
-        _consulta_parametros_hordas_canal = select_parametros_hordas_canal()
-        return _consulta_parametros_hordas_canal
-
-    @atualDB.select_table_one_data
     async def consulta_aventureiro_por_nome(self, dados ={}):
         _select_aventureiro_por_nome = select_aventureiro_nome(dados)
         return _select_aventureiro_por_nome 
@@ -46,6 +41,11 @@ class Capaventura_DB_Connect():
     async def consulta_aventureiro_por_id(self, dados ={}):
         _select_aventureiro_por_id = select_aventureiro_id(dados)
         return _select_aventureiro_por_id 
+
+    @atualDB.select_table_one_data
+    async def consulta_parametros_hordas_canal(self, dados ={}):
+        _consulta_parametros_hordas_canal = select_parametros_hordas_canal(dados)
+        return _consulta_parametros_hordas_canal
 
     @atualDB.select_table_many_data
     async def consulta_canais_ativos_existentes(self, dados ={}):
