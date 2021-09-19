@@ -8,11 +8,17 @@ class Final_horda():
         self.envia_msg_without_context = self.bot.cogs['Envia_Msg'].envia_msg_without_context
         self.nome_task_nova_horda_sync = task_nova_horda_sync
         
-    async def final_horda_async(self, dados):
-        _dados_canal = dados["dados_canal"]
-        _dados_horda = dados["dados_horda"]
+    async def final_horda_async(self, dados_canal):
+        _dados_canal = dados_canal
+        _dados_horda = self.bot.dados_horda[dados_canal["canal_id"]]
+        self.bot.dados_horda[dados_canal["canal_id"]]["nome_horda"] = ""
         _parametros_horda = self.bot.parametros_horda[_dados_canal["canal_id"]]
         _tempo_para_proxima_horda = self.bot.random_randint(_parametros_horda["tempo_entre_hordas_min"], _parametros_horda["tempo_entre_hordas_max"])
+        
+        dados = {
+            "dados_canal" : dados_canal,
+            "dados_horda" : _dados_horda
+        }
 
         dados["dados_horda"]["tempo_espera"] = _tempo_para_proxima_horda
 
@@ -38,7 +44,7 @@ class Final_horda():
 
         if not _canal_online:
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_normal_horde_message_offline_channel", 
+                "user_channel", "horde_messages", "end_normal_horde_message_offline_channel", 
                 _dados_horda)
         
             await self.envia_msg_without_context(_dados_canal, self.message)
@@ -46,7 +52,7 @@ class Final_horda():
             return
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_normal_horde_message", 
+                "user_channel", "horde_messages", "end_normal_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -59,7 +65,7 @@ class Final_horda():
 
         if not _canal_online:
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_elemental_horde_message_offline_channel", 
+                "user_channel", "horde_messages", "end_elemental_horde_message_offline_channel", 
                 _dados_horda)
         
             await self.envia_msg_without_context(_dados_canal, self.message)
@@ -67,7 +73,7 @@ class Final_horda():
             return
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_elemental_horde_message", 
+                "user_channel", "horde_messages", "end_elemental_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -80,7 +86,7 @@ class Final_horda():
 
         if not _canal_online:
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_capraid_defeat_message_offline_channel", 
+                "user_channel", "horde_messages", "end_capraid_defeat_message_offline_channel", 
                 _dados_horda)
         
             await self.envia_msg_without_context(_dados_canal, self.message)
@@ -88,7 +94,7 @@ class Final_horda():
             return
         
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_capraid_defeat_message", 
+                "user_channel", "horde_messages", "end_capraid_defeat_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -101,7 +107,7 @@ class Final_horda():
 
         if not _canal_online:
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_normal_horde_message_offline_channel", 
+                "user_channel", "horde_messages", "end_normal_horde_message_offline_channel", 
                 _dados_horda)
         
             await self.envia_msg_without_context(_dados_canal, self.message)
@@ -109,7 +115,7 @@ class Final_horda():
             return
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "end_normal_horde_message", 
+                "user_channel", "horde_messages", "end_normal_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)

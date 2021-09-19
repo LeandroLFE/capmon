@@ -26,7 +26,7 @@ class Warning_final_horda():
         _dados_horda = dados["dados_horda"]
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "warning_finishing_normal_horde_message", 
+                "user_channel", "horde_messages", "warning_finishing_normal_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -36,7 +36,7 @@ class Warning_final_horda():
         _dados_horda = dados["dados_horda"]
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "warning_finishing_elemental_horde_message", 
+                "user_channel", "horde_messages", "warning_finishing_elemental_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -46,7 +46,7 @@ class Warning_final_horda():
         _dados_horda = dados["dados_horda"]
         
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "warning_finishing_capraid_message", 
+                "user_channel", "horde_messages", "warning_finishing_capraid_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)
@@ -56,7 +56,7 @@ class Warning_final_horda():
         _dados_horda = dados["dados_horda"]
 
         self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "warning_finishing_normal_horde_message", 
+                "user_channel", "horde_messages", "warning_finishing_normal_horde_message", 
                 _dados_horda)
         
         await self.envia_msg_without_context(_dados_canal, self.message)

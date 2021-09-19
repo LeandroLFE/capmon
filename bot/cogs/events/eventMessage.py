@@ -10,8 +10,8 @@ class EventMessage(Cog):
 
     @Cog.event()
     async def event_message(self, message: Message):
-        print(message.tags["room-id"])
-        print(message.tags["user-id"])
+        self.bot.logger.info(message.tags["room-id"])
+        self.bot.logger.info(message.tags["user-id"])
         if message.author.name.lower() == self.bot.nick.lower():
             return
         message.content = remover_acentos(message.content).lower()

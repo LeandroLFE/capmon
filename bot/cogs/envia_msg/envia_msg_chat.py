@@ -10,7 +10,7 @@ class Envia_Msg(Cog):
 
     async def envia_msg_with_context(self, ctx, msg=''):
         if isinstance(msg, str) == False or msg =='':
-            print(f"Tipo errado msg: {type(msg)}") if isinstance(msg, str) == False else print(f"Msg vazio: {msg}")
+            self.bot.logger.warning(f"Tipo errado msg: {type(msg)}") if isinstance(msg, str) == False else self.bot.logger.warning(f"Msg vazio: {msg}")
             return
         
         parametros = {}
@@ -29,7 +29,7 @@ class Envia_Msg(Cog):
         _ultima_msg = _ultima_msg["msg"] if issubclass(type(_ultima_msg), dict) else _ultima_msg
 
         if _ultima_msg != None and type(_ultima_msg) != str:
-            print(f"Tipo errado ultima_msg: {type(_ultima_msg)}")
+            self.bot.logger.warning(f"Tipo errado ultima_msg: {type(_ultima_msg)}")
             return
 
         if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
@@ -40,6 +40,9 @@ class Envia_Msg(Cog):
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
             msg_modificada = f'{msg} ({data_e_hora_em_texto})'
             await ctx.send(msg_modificada)
+
+        _info_msg = f"""Em resposta a {ctx.message.author.name} que enviou o comando: {ctx.message.content} no canal {ctx.message.channel.name}\nR: {parametros["msg"].strip()}"""
+        self.bot.logger[parametros["canal_id"]].info(_info_msg)
 
     async def envia_msg_without_context(self, channel_data, msg=''):
         _msg =  f"""PRIVMSG #{channel_data["nome_canal"]} :{msg}\r\n"""
@@ -60,3 +63,5 @@ class Envia_Msg(Cog):
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
             _msg = f'{_msg} ({data_e_hora_em_texto})'
             await self.bot._connection.send(_msg)
+
+        self.bot.logger[parametros["canal_id"]].info(self.bot.prepare_log(_msg))

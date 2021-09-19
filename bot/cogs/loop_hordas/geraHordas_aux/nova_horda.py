@@ -16,13 +16,13 @@ class Nova_horda():
         dados_canal["nome_idioma"] = _nome_idioma["nome"]
         _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]] 
 
-        if not _canal_online:
-            _tempo_para_proxima_horda = self.bot.random_randint(_parametros_horda["tempo_entre_hordas_min"], _parametros_horda["tempo_entre_hordas_max"])
-            _task = self.bot.loop.create_task(self.bot.aguarda(self, _tempo_para_proxima_horda))
-            _nome_task = self.nome_task_nova_horda_sync(dados_canal)  
-            _task.set_name(_nome_task)
-            _task.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_nova_horda_sync, dados_canal))
-            return
+        # if not _canal_online:
+        #     _tempo_para_proxima_horda = self.bot.random_randint(_parametros_horda["tempo_entre_hordas_min"], _parametros_horda["tempo_entre_hordas_max"])
+        #     _task = self.bot.loop.create_task(self.bot.aguarda(self, _tempo_para_proxima_horda))
+        #     _nome_task = self.nome_task_nova_horda_sync(dados_canal)  
+        #     _task.set_name(_nome_task)
+        #     _task.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_nova_horda_sync, dados_canal))
+        #     return
 
         await self.db.update_tipo_horda_ativa(dados_canal)  
         
@@ -48,13 +48,10 @@ class Nova_horda():
         _task.set_name(_nome_task)
         _task_warning.set_name(_nome_task_warning)
 
-        dados = {
-            "dados_canal" : dados_canal,
-            "dados_horda" : _dados_horda,
-        }
+        self.bot.dados_horda[dados_canal["canal_id"]] = _dados_horda
 
-        _task.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_final_horda_sync, dados))     
-        _task_warning.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_warning_final_horda_sync, dados))    
+        _task.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_final_horda_sync, dados_canal))     
+        _task_warning.add_done_callback(self.bot.functools_partial(self.bot.gera_hordas_warning_final_horda_sync, dados_canal))    
        
     async def tipo_horda_normal_aleatoria(self, dados_canal):
 
@@ -65,6 +62,7 @@ class Nova_horda():
         _duracao = self.bot.random_randint(_parametros_horda["tempo_horda_min"], _parametros_horda["tempo_horda_max"]) 
 
         dados_horda = {
+            "nome_idioma" : dados_canal["nome_idioma"],
             "nome_horda" : "normal_aleatoria",
             "criatura" : _criatura,
             "criaturas" : [],
@@ -73,7 +71,7 @@ class Nova_horda():
         }
         
         self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_normal_horde_message", 
+                "user_channel", "horde_messages", "new_normal_horde_message", 
                 dados_horda)
         
         await self.envia_msg_without_context(dados_canal, self.message)
@@ -114,7 +112,7 @@ class Nova_horda():
         dados_horda["atributo"] = _atributo["nome"]
 
         self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_elemental_horde_message", 
+                "user_channel", "horde_messages", "new_elemental_horde_message", 
                 dados_horda)
         
         await self.envia_msg_without_context(dados_canal, self.message)
@@ -134,6 +132,7 @@ class Nova_horda():
         }
 
         dados_horda = {
+            "nome_idioma" : dados_canal["nome_idioma"],
             "nome_horda" : "capraid",
             "criatura" : _criatura,
             "criaturas" : [],
@@ -142,7 +141,7 @@ class Nova_horda():
         }
         
         self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_capraid_message", 
+                "user_channel", "horde_messages", "new_capraid_message", 
                 dados_horda)
         
         await self.envia_msg_without_context(dados_canal, self.message)
@@ -164,7 +163,7 @@ class Nova_horda():
         }
         
         self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_normal_horde_message", 
+                "user_channel", "horde_messages", "new_normal_horde_message", 
                 dados_horda)
         
         await self.envia_msg_without_context(dados_canal, self.message)

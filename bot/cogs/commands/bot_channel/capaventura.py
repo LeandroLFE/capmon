@@ -26,6 +26,9 @@ class Capaventura(Cog):
 
     @command(name='capaventura', aliases=['capadventure'])
     async def capaventura(self, ctx, _cmd='', _opt=''):
+        if ctx.channel.name != self.bot.nick:
+            return
+            
         _cmd = self.bot.remover_acentos(_cmd)
         _opt = self.bot.remover_acentos(_opt)
         _aventureiro = self.bot.remover_acentos(ctx.author.name)
