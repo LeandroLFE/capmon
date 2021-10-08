@@ -18,7 +18,7 @@ Requer: {
 }
 '''
 select_parametros_buddies_canal = lambda dados = "" : """
-    Select Pb.qtde_hordas_para_add_cp, Pb.add_cp_min, Pb.add_cp_max,
+    Select Pb.qtde_hordas_para_add_cp, Pb.add_cp_min, Pb.add_cp_max
     FROM Canais
     INNER JOIN Parametros_buddies as Pb
     ON Canais.parametros_buddies = Pb.id
@@ -50,6 +50,19 @@ select_parametros_aventureiros_canal = lambda dados = "" : """
     INNER JOIN Parametros_aventureiros as Pa
     ON Canais.parametros_aventureiros = Pa.id
     WHERE Canais.canal_id = :canal_id
+"""
+
+'''
+Requer: {
+    "criatura_nome" : str
+}
+'''
+select_parametros_criatura = lambda dados = "" : """
+    Select Pc.cp_inicial, Pc.chance_captura, Pc.chance_especial, Pc.num_tentativas_caso_zero_ou_negativo
+    FROM Parametros_criaturas as Pc
+    INNER JOIN Criaturas
+    ON Pc.id = Criaturas.parametro_criatura
+    WHERE LOWER(Criaturas.nome) = LOWER(:criatura_nome)
 """
 
 '''

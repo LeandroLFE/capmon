@@ -2,8 +2,9 @@ script_create_table_criaturas = lambda dados = {} : """
     DROP TABLE IF EXISTS Criaturas;
     
     CREATE TABLE Criaturas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         num INTEGER ,
-        tipo INTEGER  DEFAULT 1,
+        tipo INTEGER DEFAULT 1,
         nome text NOT NULL,
         forma int NOT NULL,
         linha_evolutiva int NOT NULL,
@@ -11,7 +12,7 @@ script_create_table_criaturas = lambda dados = {} : """
         cp_max int NOT NULL,
         atributo1 int NOT NULL,
         atributo2 int DEFAULT NULL,
-        chance_especial int NOT NULL DEFAULT 1,
+        parametro_criatura int NOT NULL DEFAULT 1,
         custo int NOT NULL,
         evolucao int NOT NULL,
         cp_limite int NOT NULL,
@@ -21,17 +22,18 @@ script_create_table_criaturas = lambda dados = {} : """
         FOREIGN KEY (atributo1)
             REFERENCES Atributos (ref),
         FOREIGN KEY (atributo2)
-            REFERENCES Atributos (ref),
+            REFERENCES Atributos (ref),    
+        FOREIGN KEY (parametro_criatura)
+            REFERENCES Parametros_criaturas(id),
         FOREIGN KEY (custo)
-            REFERENCES Custos(ref),
-        PRIMARY KEY (num, tipo)
+            REFERENCES Custos(ref)
     );
 """
 
 script_insert_table_criaturas = lambda dados = {} : """
     INSERT INTO Criaturas 
     (num, tipo, nome, forma, linha_Evolutiva, cp_min, cp_max, 
-    atributo1, atributo2, chance_especial, custo, evolucao, cp_limite, evolui) 
+    atributo1, atributo2, parametro_criatura, custo, evolucao, cp_limite, evolui) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 """
 

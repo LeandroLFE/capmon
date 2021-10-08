@@ -10,12 +10,17 @@ class Warning_final_horda():
         self.nome_task_nova_horda_sync = task_nova_horda_sync
         
     async def warning_final_horda_async(self, dados):
-        _dados_canal = dados["dados_canal"]
-        _dados_horda = dados["dados_horda"]
+        _dados_canal = dados
+        _dados_horda = self.bot.dados_horda[_dados_canal["canal_id"]]
         _parametros_horda = self.bot.parametros_horda[_dados_canal["canal_id"]] 
         _tempo_warning_final_horda = _parametros_horda["aviso_horda_terminando_em_x_segundos"]
 
-        dados["dados_horda"]["aviso"] = _tempo_warning_final_horda
+        _dados_horda["aviso"] = _tempo_warning_final_horda
+
+        dados = {
+            "dados_canal" : _dados_canal,
+            "dados_horda" : _dados_horda,
+        }
 
         _nome_func_tipo_horda = f"""tipo_horda_{_dados_horda["nome_horda"]}"""
         _func_tipo_horda = getattr(self, _nome_func_tipo_horda) 

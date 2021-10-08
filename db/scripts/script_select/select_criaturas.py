@@ -10,7 +10,8 @@ select_criatura_aleatoria = lambda dados = {} : f"""
     Criaturas.cp_min, Criaturas.cp_max, 
     Atr1.nome AS "nome_atributo1",
     Atr2.nome AS "nome_atributo2",
-    Criaturas.chance_especial,  
+    Pc.chance_captura,
+    Pc.chance_especial,  
     Criaturas.custo, 
     Criaturas.evolucao, 
     Criaturas.cp_limite, 
@@ -18,6 +19,8 @@ select_criatura_aleatoria = lambda dados = {} : f"""
     FROM Criaturas 
     INNER JOIN Tipos
     ON Criaturas.tipo = Tipos.id
+    INNER JOIN Parametros_criaturas as Pc
+    ON Criaturas.parametro_criatura = Pc.id  
     INNER JOIN 
     (
     SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
@@ -43,13 +46,14 @@ select_criatura_aleatoria = lambda dados = {} : f"""
     LIMIT 1
 """
 
-select_criatura_aleatoria_lendaria = lambda idioma : f"""
+select_criatura_aleatoria_lendaria = lambda dados : f"""
     SELECT Criaturas.num, Tipos.nome as nome_tipo, Criaturas.Nome, Criaturas.forma,
     Criaturas.linha_evolutiva,
     Criaturas.cp_min, Criaturas.cp_max, 
     Atr1.nome AS "nome_atributo1",
     Atr2.nome AS "nome_atributo2",
-    Criaturas.chance_especial,  
+    Pc.chance_captura,
+    Pc.chance_especial,   
     Criaturas.custo, 
     Criaturas.evolucao, 
     Criaturas.cp_limite, 
@@ -57,6 +61,8 @@ select_criatura_aleatoria_lendaria = lambda idioma : f"""
     FROM Criaturas 
     INNER JOIN Tipos
     ON Criaturas.tipo = Tipos.id
+    INNER JOIN Parametros_criaturas as Pc
+    ON Criaturas.parametro_criatura = Pc.id 
     INNER JOIN 
     (
     SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
@@ -132,7 +138,8 @@ select_criaturas_atributo = lambda idioma : f"""
     Criaturas.cp_min, Criaturas.cp_max, 
     Atr1.nome AS "nome_atributo1",
     Atr2.nome AS "nome_atributo2",
-    Criaturas.chance_especial,  
+    Pc.chance_captura,
+    Pc.chance_especial,  
     Criaturas.custo, 
     Criaturas.evolucao, 
     Criaturas.cp_limite, 
@@ -140,6 +147,8 @@ select_criaturas_atributo = lambda idioma : f"""
     FROM Criaturas 
     INNER JOIN Tipos
     ON Criaturas.tipo = Tipos.id
+    INNER JOIN Parametros_criaturas as Pc
+    ON Criaturas.parametro_criatura = Pc.id 
     INNER JOIN 
     (
     SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
@@ -163,5 +172,5 @@ select_criaturas_atributo = lambda idioma : f"""
     AND (Atr1.ref = :ref_atributo OR Atr2.ref = :ref_atributo)
     AND Criaturas.custo = :custo
     ORDER BY RANDOM() 
-    LIMIT 1
+    LIMIT 10
 """ 

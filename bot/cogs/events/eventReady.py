@@ -2,7 +2,7 @@ from twitchio.ext.commands import Cog
 from bot.cogs.events.eventReady_aux.eventReady_db_connect import Event_Ready_DB_Connect
 from bot.methods.aguarda.aguarda import aguarda
 from bot.methods.verifica_canal_online.verifica_canal_online import verifica_canal_online
-from bot.methods.logging.logging import new_logging
+from bot.methods.logging.logging import set_logging
 from utils.removedor_acentos import remover_acentos
 from bot.methods.logging.logging_aux.prepare_log_msg_without_context import prepare_log_msg_without_context
 from utils.import_message_language import import_message_language_by_one
@@ -32,13 +32,12 @@ class EventReady(Cog):
         self.bot.dados_horda = {}
         self.bot.functools_partial = partial
         self.bot.datetime = datetime
-        self.bot.new_logging = new_logging
-        self.bot.logger = {}
+        self.bot.set_logging = set_logging
 
     @Cog.event()
     async def event_ready(self):    
-        self.bot.logger[self.bot.nick] = self.bot.new_logging(self.bot.nick)
-        self.bot.logger[self.bot.nick].info(f'Logged in as {self.bot.nick}')
+        self.bot.logger = self.bot.set_logging(self.bot.nick)
+        self.bot.logger.info(f'Logged in as {self.bot.nick}')
         self.bot.canais_ativos = await self.db.consulta_canais_ativos()
         for canal in self.bot.canais_ativos:
             self.bot.canal_thread = canal["canal_id"]

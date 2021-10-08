@@ -17,8 +17,8 @@ class EventJoin(Cog):
             return
         self.func_nova_horda_sync = self.bot.cogs['GeraHordas'].nova_horda_sync
 
-        self.bot.logger[self.bot.canal_thread] = self.bot.new_logging(self.bot.canal_thread)
-        self.bot.logger[self.bot.canal_thread].info(f'Joined in {channel.name}')
+        self.bot.logger = self.bot.set_logging(self.bot.canal_thread)
+        self.bot.logger.info(f'Joined in {channel.name}')
 
         dados_canal = {
             "canal_id" : self.bot.canal_thread,

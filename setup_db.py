@@ -1,7 +1,7 @@
 from auth.auth import db_location, db_name
 
 from db.connect.db_classes.conectaSQLite import ConectaSQLite
-from db.default_data.dados_parametros import script_create_table_parametros_aventureiros, script_create_table_parametros_buddies, script_create_table_parametros_capboard, script_create_table_parametros_hordas, script_insert_table_parametros_aventureiros, script_insert_table_parametros_buddies, script_insert_table_parametros_capboard, script_insert_table_parametros_hordas, dados_padrao_tabela_parametros_aventureiros, dados_padrao_tabela_parametros_buddies, dados_padrao_tabela_parametros_capboard, dados_padrao_tabela_parametros_hordas
+from db.default_data.dados_parametros import script_create_table_parametros_aventureiros, script_create_table_parametros_buddies, script_create_table_parametros_capboard, script_create_table_parametros_hordas, script_create_table_parametros_criaturas, script_insert_table_parametros_criaturas, dados_padrao_tabela_parametros_criaturas, script_insert_table_parametros_aventureiros, script_insert_table_parametros_buddies, script_insert_table_parametros_capboard, script_insert_table_parametros_hordas, dados_padrao_tabela_parametros_aventureiros, dados_padrao_tabela_parametros_buddies, dados_padrao_tabela_parametros_capboard, dados_padrao_tabela_parametros_hordas
 from db.default_data.dados_vantagens_subs_perfis import script_create_table_vantagens_subs, script_insert_table_vantagens_subs, dados_padrao_tabela_vantagens_subs
 from db.default_data.dados_tipos import script_create_table_tipos, script_insert_table_tipos, dados_padrao_tabela_tipos
 from db.default_data.dados_idiomas import script_create_table_idiomas, script_insert_table_idiomas, dados_padrao_tabela_idiomas
@@ -116,6 +116,14 @@ class Setup():
     def insert_table_parametros_hordas(self, dados : dict = {}):
         return script_insert_table_parametros_hordas()
 
+    @db.create_or_drop_table
+    def create_table_parametros_criaturas(self, dados={}):
+        return script_create_table_parametros_criaturas()
+
+    @db.insert_table_one_line
+    def insert_table_parametros_criaturas(self, dados={}):
+        return script_insert_table_parametros_criaturas()
+
     '''
         ---------------------------------------------------------------------   
     '''
@@ -223,6 +231,9 @@ if __name__ == "__main__":
 
     setup_obj.create_table_parametros_aventureiros()
     setup_obj.insert_table_parametros_aventureiros(dados_padrao_tabela_parametros_aventureiros())
+
+    setup_obj.create_table_parametros_criaturas()
+    setup_obj.insert_table_parametros_criaturas(dados_padrao_tabela_parametros_criaturas())
 
     setup_obj.create_table_parametros_hordas()
     setup_obj.insert_table_parametros_hordas(dados_padrao_tabela_parametros_hordas())

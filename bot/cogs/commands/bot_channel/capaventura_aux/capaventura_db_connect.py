@@ -1,13 +1,12 @@
 from db.connect.instanciaAtualDB import atualDB
 from db.scripts.script_select.select_canais import select_verifica_canal, select_canais_ativos
-from db.scripts.script_select.select_aventureiros import select_aventureiro_nome, select_aventureiro_id
+from db.scripts.script_select.select_aventureiros import script_select_aventureiro_nome, script_select_aventureiro_id
 from db.scripts.script_create_drop.create_tables import create_aventureiros_canal, create_buddies_canal, create_capturados_canal, create_tipo_hordas_canal, create_hordas_canal, create_capboard_dados_canal, create_itens_obtidos_canal
 from db.scripts.script_create_drop.drop_tables import drop_table_aventureiros_canal, drop_table_buddies_canal, drop_table_capturados_canal, drop_tipo_hordas_canal,drop_hordas_canal, drop_capboard_dados_canal, drop_itens_obtidos_canal
 from db.scripts.script_insert_update_delete.update_insert_canais import script_insert_canais, script_update_canais 
 from db.scripts.script_insert_update_delete.insert_update_tipo_hordas_canal import script_insert_table_tipo_hordas_canal 
 from db.scripts.script_insert_update_delete.insert_update_hordas_canal import script_insert_table_hordas_canal
 from db.scripts.script_insert_update_delete.insert_aventureiros import script_insert_aventureiros
-from db.scripts.script_insert_update_delete.update_aventureiros import script_update_aventureiros_canal, script_update_aventureiros_parametros
 from db.scripts.script_select.select_idiomas import script_select_todos_idiomas, script_select_idioma_por_nome
 from db.scripts.script_insert_update_delete.insert_tipo_itens import script_insert_tipo_itens
 from db.scripts.script_select.select_parametros_canal import select_parametros_aventureiros_novo_canal, select_parametros_hordas_canal
@@ -34,12 +33,12 @@ class Capaventura_DB_Connect():
 
     @atualDB.select_table_one_data
     async def consulta_aventureiro_por_nome(self, dados ={}):
-        _select_aventureiro_por_nome = select_aventureiro_nome(dados)
+        _select_aventureiro_por_nome = script_select_aventureiro_nome(dados)
         return _select_aventureiro_por_nome 
 
     @atualDB.select_table_one_data
     async def consulta_aventureiro_por_id(self, dados ={}):
-        _select_aventureiro_por_id = select_aventureiro_id(dados)
+        _select_aventureiro_por_id = script_select_aventureiro_id(dados)
         return _select_aventureiro_por_id 
 
     @atualDB.select_table_one_data
@@ -76,11 +75,6 @@ class Capaventura_DB_Connect():
     async def insert_aventureiro(self, dados={}):
         _insert_aventureiros = script_insert_aventureiros(dados)
         return _insert_aventureiros
-
-    @atualDB.update_table
-    async def update_aventureiro_canal(self, dados ={}):
-        _update_aventureiro_canal = script_update_aventureiros_canal(dados)
-        return _update_aventureiro_canal
 
     @atualDB.insert_table_many_lines
     async def insert_tipo_hordas_canal(self, dados ={}):

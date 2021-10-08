@@ -30,10 +30,17 @@ default_create_table_structure_capboard_dados = lambda dados = {} : f"""
         REFERENCES Aventureiros_{dados["canal_id"]} (aventureiro_id)
 """
 
-default_create_table_structure_buddies = lambda dados = {} : """
+default_create_table_structure_buddies = lambda dados = {} : f"""
     aventureiro_id text PRIMARY KEY,
     id_criatura int NOT NULL,
-    cont_Hordas_atual int NOT NULL DEFAULT 0
+    cont_Hordas_atual int NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (aventureiro_id)
+        REFERENCES Aventureiros_{dados["canal_id"]} (aventureiro_id),
+    FOREIGN KEY (id_criatura)
+        REFERENCES Criaturas(id),
+
+    PRIMARY KEY (aventureiro_id, id_criatura)
 """
 
 

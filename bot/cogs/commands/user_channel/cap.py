@@ -1,160 +1,264 @@
+from bot.cogs.commands.user_channel.cap_aux.cap_db_connect import Cap_DB_Connect
 from twitchio.ext.commands import Cog, command
+
 
 class Cap(Cog):
 
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-
-        self.envia_msg_without_context = self.bot.cogs['Envia_Msg'].envia_msg_without_context
-        
+        self.db = Cap_DB_Connect()
+        self.envia_msg_with_context = self.bot.cogs['Envia_Msg'].envia_msg_with_context
 
     @command(name='cap')
-    async def command_cap(self, ctx, tentativas, criatura='', item=''):
+    async def command_cap(self, ctx, tentativas='', criatura_item='', item=''):
         if ctx.channel.name == self.bot.nick:
             return
 
         _canal_id = ctx.message.tags["room-id"]
-        _aventureiro = ctx.author.name
-        _nome_idioma = self.bot.dados_horda[_canal_id]["nome_idioma"]
+        _dados_horda = self.bot.dados_horda[_canal_id]
+        _aventureiro_nome = ctx.author.name
+        _aventureiro_id = ctx.author.id
+        _nome_idioma = _dados_horda["nome_idioma"]
+
+        _aventureiro = await self.db.consulta_aventureiro({
+            "canal_id": _canal_id,
+            "aventureiro_id": _aventureiro_id
+        })
+
+        if _aventureiro == None:
+            await self.db.insert_aventureiro({
+                "canal_id": _canal_id,
+                "aventureiro_id": _aventureiro_id,
+                "aventureiro_nome": _aventureiro_nome,
+            })
+            _aventureiro = await self.db.consulta_aventureiro({
+                "canal_id": _canal_id,
+                "aventureiro_id": _aventureiro_id
+            })
+            _aventureiro_novo = True
+
+        else:
+            _aventureiro_novo = False
 
         _dados_canal = {
-            "canal_id" : _canal_id,
-            "nome_canal" : ctx.channel.name,
-            "nome_idioma" : _nome_idioma
+            "canal_id": _canal_id,
+            "nome_canal": ctx.channel.name,
+            "nome_idioma": _nome_idioma
         }
-        
-        if self.bot.dados_horda[_canal_id]["nome_horda"] == "":
-            _parametros_horda = self.bot.parametros_horda[_canal_id]
-            self.message = self.bot.import_message_language_by_one(_nome_idioma, 
-                "user_channel", "cap_messages", "error_horde_inactive", 
-                {"aventureiro": _aventureiro})
-            await self.envia_msg_without_context(_dados_canal, self.message)
+
+        if _dados_horda["nome_horda"] == "" or _dados_horda["nome_horda"] == "capraid":
+            self.message = self.bot.import_message_language_by_one(_nome_idioma,
+                                                                   "user_channel", "cap_messages", "error_horde_inactive",
+                                                                   {
+                                                                       "nome_horda": _dados_horda["nome_horda"],
+                                                                       "aventureiro": _aventureiro_nome
+                                                                   })
+            await self.envia_msg_with_context(ctx, self.message)
             return
 
-        if isinstance(tentativas, str) == isinstance(criatura, int):
-            tentativas, criatura = criatura, tentativas
+        if not str(tentativas).isnumeric() and str(criatura_item).isnumeric():
+            tentativas, criatura_item = criatura_item, tentativas
 
-        _dados_horda = self.bot.dados_horda[_canal_id] 
+        _criatura = [c for c in _dados_horda["criaturas"]
+                     if self.bot.remover_acentos(c["nome"]) == criatura_item]
 
-        _nome_func_tipo_horda = f"""tipo_horda_{_dados_horda["nome_horda"]}"""
-        _func_tipo_horda = getattr(self, _nome_func_tipo_horda) 
-        await _func_tipo_horda(_dados_canal)  
+        _criatura = _criatura[0] if _criatura != [] else {}
 
+        if _dados_horda["criaturas"] != [] and _criatura == {}:
 
-    async def tipo_horda_normal_aleatoria(self, dados_canal):
+            _opcoes = [self.bot.remover_acentos(
+                c["nome"]) for c in _dados_horda["criaturas"]]
 
-        _criatura = await self.db.seleciona_criatura_aleatoria(dados_canal)
+            self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
+                                                                   "user_channel", "cap_messages", "error_invalid_creature",
+                                                                   {
+                "aventureiro": _aventureiro_nome,
+                "opcoes": _opcoes
+            })
+            await self.envia_msg_with_context(ctx, self.message)
+            return
 
-        _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]] 
+        elif _dados_horda["criaturas"] != []:
+            _dados_horda["criatura"] = _criatura
 
-        _duracao = self.bot.random_randint(_parametros_horda["tempo_horda_min"], _parametros_horda["tempo_horda_max"]) 
+        _custo = _dados_horda["criatura"]["custo"]
 
-        dados_horda = {
-            "nome_idioma" : dados_canal["nome_idioma"],
-            "nome_horda" : "normal_aleatoria",
-            "criatura" : _criatura,
-            "criaturas" : [],
-            "capraid" : {},
-            "duracao" : _duracao,
-        }
-        
-        self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_normal_horde_message", 
-                dados_horda)
-        
-        await self.envia_msg_without_context(dados_canal, self.message)
-
-        return dados_horda
-
-    async def tipo_horda_elemental(self, dados_canal):
-
-        _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]]
-        _duracao = self.bot.random_randint(_parametros_horda["tempo_horda_min"], _parametros_horda["tempo_horda_max"]) 
-
-        _atributos = await self.db.seleciona_todos_atributos(dados_canal)
-        _custos = await self.db.seleciona_todos_custos(dados_canal)
-
-        _list_atributos = [a["ref"] for a in _atributos]
-        _list_custos = [c["ref"] for c in _custos]
-
-        dados_horda = {
-            "nome_idioma" : dados_canal["nome_idioma"],
-            "nome_horda" : "elemental",
-            "capraid" : {},
-            "duracao" : _duracao,
+        _dados_aventureiro = {
+            "aventureiro_id": _aventureiro_id,
+            "nome": _aventureiro_nome,
+            "ctx": ctx,
+            "capcoins" : _aventureiro["capcoins"],
+            "tentativas": tentativas,
+            "criatura_item": criatura_item,
+            "item": item,
+            "capturou": False,
+            "tabela": _aventureiro
         }
 
-        dados_horda["ref_atributo"] = self.bot.random_choice(_list_atributos)
-        dados_horda["custo"] = self.bot.random_choice(_list_custos)
-        _criaturas = await self.db.seleciona_criaturas_atributo(dados_horda)
-        
-        while _criaturas == []:
-            dados_horda["ref_atributo"] = self.bot.random_choice(_list_atributos)
-            dados_horda["custo"] = self.bot.random_choice(_list_custos)
-            _criaturas = await self.db.seleciona_criaturas_atributo(dados_horda)
+        _criatura_ja_capturada = None
+        _capturou = False
+        _capturou_especial = False
 
-        dados_horda["nome_tipo"] = _criaturas[0]["nome_tipo"]        
-        dados_horda["criaturas"] = _criaturas
+        _criatura = _dados_horda["criatura"]
 
-        _atributo = await self.db.seleciona_atributo_por_ref(dados_horda)
-        dados_horda["atributo"] = _atributo["nome"]
+        _parametros_criatura = await self.db.consulta_parametros_criatura({
+            "criatura_nome": _criatura["nome"]
+        })
 
-        self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_elemental_horde_message", 
-                dados_horda)
-        
-        await self.envia_msg_without_context(dados_canal, self.message)
+        if not _aventureiro_novo:
+            _criatura_ja_capturada = await self.db.consulta_se_ja_tem_capturada({
+                "canal_id": _dados_canal["canal_id"],
+                "aventureiro_id": _aventureiro_id,
+                "nome_criatura":  _dados_horda["criatura"]["nome"],
+            })
 
-        return dados_horda
+        _ja_capturou_antes = True
 
-    async def tipo_horda_capraid(self, dados_canal):
+        if _criatura_ja_capturada == None:
+            _ja_capturou_antes = False
+            _criatura_ja_capturada = {
+                "cp": _parametros_criatura["cp_inicial"],
+                "especial": _capturou_especial
+            }
 
-        _criatura = await self.db.seleciona_criatura_aleatoria_lendaria(dados_canal)
+        _dados_horda["criatura_ja_capturada"] = _criatura_ja_capturada
+        _dados_horda["dados_aventureiro"] = _dados_aventureiro
 
-        _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]] 
-
-        _duracao = _parametros_horda["tempo_horda_max"]
-
-        _capraid = {
-
+        dados = {
+            "dados_canal": _dados_canal,
+            "dados_horda": _dados_horda,
         }
 
-        dados_horda = {
-            "nome_idioma" : dados_canal["nome_idioma"],
-            "nome_horda" : "capraid",
-            "criatura" : _criatura,
-            "criaturas" : [],
-            "capraid" : _capraid,
-            "duracao" : _duracao,
-        }
-        
-        self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_capraid_message", 
-                dados_horda)
-        
-        await self.envia_msg_without_context(dados_canal, self.message)
+        _aventureiro_tabela = [a for a in _dados_horda["aventureiros"]
+                               if a["aventureiro_id"] == _aventureiro["aventureiro_id"]]
+        if _aventureiro_tabela != []:
+            _aventureiro_tabela = _aventureiro_tabela[0]
+            _dados_horda["dados_aventureiro"] = _aventureiro_tabela
 
-        return dados_horda
+            self.message = self.bot.import_message_language_by_one(_nome_idioma,
+                                                                   "user_channel", "cap_messages", "error_adventure_already_participated", _dados_horda)
+            await self.envia_msg_with_context(ctx, self.message)
+            return
 
-    async def tipo_horda_normal_especifica(self, dados_canal, criatura):
+        if not str(tentativas).isnumeric():
+            self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
+                                                                   "user_channel", "cap_messages", "error_invalid_attempties",
+                                                                   {
+                "nome_horda": _dados_horda["nome_horda"],
+                "aventureiro": _aventureiro_nome,
+                "custo": _custo,
+                "criaturas": _dados_horda["criaturas"]
+            })
+            await self.envia_msg_with_context(ctx, self.message)
+            return
 
-        _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]] 
+        _capturado = {
+                "aventureiro_id": _aventureiro_id,
+                "id_criatura": 0,
+                "cp": 0,
+                "golpe": 0,
+                "criatura_tipo": 0,
+                "custo_capcoins": 0,
+                "especial": 0,
+            }
 
-        _duracao = self.bot.random_randint(_parametros_horda["tempo_horda_min"], _parametros_horda["tempo_horda_max"]) 
+        tentativas = int(tentativas)
 
-        dados_horda = {
-            "nome_horda" : "normal_especifica",
-            "criatura" : criatura,
-            "criaturas" : [],
-            "capraid" : {},
-            "duracao" : _duracao,
-        }
-        
-        self.message = self.bot.import_message_language_by_one(dados_canal["nome_idioma"], 
-                "adventure_channel", "horde_messages", "new_normal_horde_message", 
-                dados_horda)
-        
-        await self.envia_msg_without_context(dados_canal, self.message)
+        if tentativas < 0:
+            tentativas = _parametros_criatura["num_tentativas_caso_zero_ou_negativo"]
 
-        return dados_horda
+        elif tentativas == 0:
+
+            _dados_horda["aventureiros"].append(_dados_aventureiro)
+            self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
+                                                                   "user_channel", "cap_messages", "error_invalid_attempties",
+                                                                   {
+                "nome_horda": _dados_horda["nome_horda"],
+                "aventureiro": _aventureiro_nome,
+                "custo": _custo,
+                "criaturas": _dados_horda["criaturas"]
+            })
+            await self.envia_msg_with_context(ctx, self.message)
+            return
+
+        _custo_capcoins = tentativas * _criatura["custo"]
+
+        _dados_aventureiro["tentativas"] = tentativas
+
+        if _custo_capcoins > _aventureiro["capcoins"]:
+            self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
+                                                                   "user_channel", "cap_messages", "error_overload_attempties",
+                                                                   {
+                "aventureiro": _aventureiro_nome,
+                "custo": _custo,
+                "capcoins": _aventureiro["capcoins"]
+            })
+            await self.envia_msg_with_context(ctx, self.message)
+            return
+
+        _chance_captura = _parametros_criatura["chance_captura"]
+        _chance_especial = _parametros_criatura["chance_especial"]
+
+        if ctx.author.is_subscriber:
+            _vantagens_subs_canal = await self.db.consulta_vantagens_subs_canal(_dados_canal)
+            if _vantagens_subs_canal["habilita_vantagens_subs"]:
+                _chance_captura += _vantagens_subs_canal["aumento_chance_captura"]
+                _chance_especial += _vantagens_subs_canal["aumento_chance_especial"]
+
+        if _dados_aventureiro["item"] != '':
+            _itens_obtidos = await self.db.consulta_itens_obtidos({
+                "aventureiro_id": _aventureiro_id,
+                "canal_id": _dados_canal["canal_id"],
+                "nome_idioma": _dados_canal["nome_idioma"],
+            })
+
+        for _ in range(tentativas):
+            _sorteio_captura = self.bot.random_randint(1, 100)
+            if _sorteio_captura <= _chance_captura:
+                _capturou = True
+                break
+
+        _dados_aventureiro["capcoins"] -=  _custo_capcoins
+
+        if _capturou:
+
+            _sorteio_especial = self.bot.random_randint(1, 100)
+
+            if _sorteio_especial <= _chance_especial:
+                _capturou_especial = True
+
+            _atributo = self.bot.random_choice([_dados_horda["criatura"]["nome_atributo1"], _dados_horda["criatura"]["nome_atributo2"]
+                                                ]) if _dados_horda["criatura"]["nome_atributo2"] != None else _dados_horda["criatura"]["nome_atributo1"]
+
+            _cp = self.bot.randint(
+                _dados_horda["criatura"]["cp_min"], _dados_horda["criatura"]["cp_max"]) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]
+
+            _capturado = {
+                "aventureiro_id": _aventureiro_id,
+                "id_criatura": _dados_horda["criatura"]["num"],
+                "cp": _cp,
+                "golpe": _atributo,
+                "criatura_tipo": _dados_horda["criatura"]["nome_tipo"],
+                "custo_capcoins": _custo_capcoins,
+                "especial": _capturou_especial,
+            }
+
+            _dados_horda["capturado"] = _capturado
+            _dados_horda["capturados"].append(_capturado)
+
+            _dados_aventureiro["capturou"] = True
+
+        else:
+            _capturado["custo_capcoins"] = _custo_capcoins
+            _dados_horda["capturado"] = _capturado
+            _dados_horda["capturados"].append(_capturado)
+
+        _dados_horda["aventureiros"].append(_dados_aventureiro)
+
+        self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
+                                                               "user_channel", "cap_messages", "cap_command_capture_messages",
+                                                               dados)
+        await self.envia_msg_with_context(ctx, self.message)
+
+    

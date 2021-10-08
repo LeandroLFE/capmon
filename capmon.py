@@ -21,4 +21,7 @@ def prepare(bot: Bot, cogs: list):
 if __name__ == "__main__":
     bot = Bot()   
     prepare(bot, cogs)
-    bot.run()
+    try:
+        bot.run()
+    except Exception as e:
+        print(f"Erro inesperado : {e}")

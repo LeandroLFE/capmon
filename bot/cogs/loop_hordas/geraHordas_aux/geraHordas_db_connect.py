@@ -3,10 +3,14 @@ from db.scripts.script_select.select_criaturas import select_criatura_aleatoria,
 from db.scripts.script_select.select_horda_ativa_canal import select_horda_ativa_canal
 from db.scripts.script_insert_update_delete.insert_update_hordas_canal import script_update_table_hordas_horda_ativa_canal, script_update_table_hordas_tipo_horda_canal
 from db.scripts.script_insert_update_delete.insert_update_tipo_hordas_canal import script_update_table_tipo_hordas_reset_percent_atual, script_update_table_tipo_hordas_elemental_canal, script_update_table_tipo_hordas_capraid_canal, script_update_table_tipo_hordas_horda_especifica_canal
-from db.scripts.script_select.select_parametros_canal import select_parametros_hordas_canal
+from db.scripts.script_select.select_parametros_canal import select_parametros_hordas_canal, select_parametros_aventureiros_canal
 from db.scripts.script_select.select_idiomas import script_select_idioma_por_canal_id
 from db.scripts.script_select.select_atributos import select_all_ref_atributos, select_atributos_ref
 from db.scripts.script_select.select_custos import select_all_ref_custos
+from db.scripts.script_insert_update_delete.insert_update_aventureiros import script_insert_update_aventureiros_canal
+from db.scripts.script_insert_update_delete.insert_update_capturados import script_insert_update_capturados
+from db.scripts.script_insert_update_delete.update_aventureiros import script_reset_cont_sequencia_outros_aventureiros
+
 
 class Gera_Hordas_DB_Connect():
 
@@ -54,6 +58,11 @@ class Gera_Hordas_DB_Connect():
         return _consulta_parametros_hordas_canal
 
     @atualDB.select_table_one_data
+    async def consulta_parametros_aventureiros_canal(self, dados = {}):
+        _consulta_parametros_aventureiros_canal = select_parametros_aventureiros_canal(dados)
+        return _consulta_parametros_aventureiros_canal
+
+    @atualDB.select_table_one_data
     async def seleciona_horda_ativa_canal(self, dados = {}):
         _seleciona_horda_ativa_canal = select_horda_ativa_canal(dados)
         return _seleciona_horda_ativa_canal
@@ -92,3 +101,18 @@ class Gera_Hordas_DB_Connect():
     async def update_tipo_hordas_horda_especifica(self, dados = {}):
         _update_tipo_hordas_horda_especifica = script_update_table_tipo_hordas_horda_especifica_canal(dados)
         return _update_tipo_hordas_horda_especifica    
+
+    @atualDB.insert_table_many_lines
+    async def insert_update_aventureiros(self, dados = {}):
+        _insert_update_aventureiros = script_insert_update_aventureiros_canal(dados)
+        return _insert_update_aventureiros
+
+    @atualDB.update_table
+    async def reset_cont_sequencia_outros_aventureiros(self, dados = {}):
+        _reset_cont_sequencia_outros_aventureiros = script_reset_cont_sequencia_outros_aventureiros(dados)
+        return _reset_cont_sequencia_outros_aventureiros
+
+    @atualDB.insert_table_many_lines
+    async def insert_update_capturados(self, dados = {}):
+        _insert_update_capturados = script_insert_update_capturados(dados)
+        return _insert_update_capturados

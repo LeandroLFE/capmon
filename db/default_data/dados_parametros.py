@@ -57,6 +57,30 @@ dados_padrao_tabela_parametros_hordas = lambda dados = {} : {
 }
 
 
+script_create_table_parametros_criaturas = lambda dados = {} : """
+    DROP TABLE IF EXISTS Parametros_criaturas;
+
+    CREATE TABLE Parametros_criaturas (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        cp_inicial int NOT NULL,
+        chance_captura int NOT NULL,
+        chance_especial int NOT NULL,
+        num_tentativas_caso_zero_ou_negativo int NOT NULL
+    );
+"""
+script_insert_table_parametros_criaturas = lambda dados = {} : """
+    INSERT INTO Parametros_criaturas (cp_inicial, chance_captura, chance_especial, num_tentativas_caso_zero_ou_negativo)  
+    VALUES (:cp_inicial, :chance_captura, :chance_especial, :num_tentativas_caso_zero_ou_negativo);
+"""
+
+dados_padrao_tabela_parametros_criaturas = lambda dados = {} : {
+    "cp_inicial" : 250,
+    "chance_captura" : 50,    
+    "chance_especial" : 1,    
+    "num_tentativas_caso_zero_ou_negativo" : 50,
+}
+
+
 script_create_table_parametros_aventureiros = lambda dados = {} : """
     DROP TABLE IF EXISTS Parametros_aventureiros;
 

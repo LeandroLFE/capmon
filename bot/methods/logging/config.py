@@ -1,4 +1,4 @@
-from logging import basicConfig
+from logging import disable
 from utils.blender_bcolors import bcolors
 config = lambda dados : {
         'version': 1,
@@ -26,22 +26,16 @@ config = lambda dados : {
                 'level': 'INFO',
                 'encoding' : 'UTF-8',
             },
-            'errors': {
-                'class': 'logging.FileHandler',
-                'filename': 'logs/bot-errors.log',
-                'mode': 'a',
-                'level': 'ERROR',
-                'formatter': 'file',
-                'encoding' : 'UTF-8',
-            },
         },
         'loggers': {
-            'bot': {
-                'handlers': ['console', 'file']
-            }
+            dados['filename']: {
+                'handlers': ['file'],
+                'disable' : False,
+            },
         },
         'root': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file', 'errors']
+            'handlers': ['console'],
+            'disable' : False,
         },
     }

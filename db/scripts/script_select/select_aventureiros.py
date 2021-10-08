@@ -1,11 +1,11 @@
-select_aventureiros = lambda dados = {} : f"""
+script_select_aventureiros = lambda dados = {} : f"""
     Select DISTINCT aventureiro_id, nome, capcoins, cont_hordas, cont_sequencia, bonus 
     FROM aventureiros_{dados["canal_id"]} AS aventureiros 
     ORDER BY aventureiro_Id 
 """
 
 # Requer nome_aventureiro = {"nome_aventureiro": str} 
-select_aventureiro_nome = lambda dados = {} : f"""
+script_select_aventureiro_nome = lambda dados = {} : f"""
     Select DISTINCT Aventureiros.aventureiro_id, Aventureiros.nome as nome_aventureiro, 
         capcoins, cont_Hordas, cont_Sequencia, Idiomas.nome as nome_idioma
     FROM aventureiros_{dados["canal_id"]} AS aventureiros 
@@ -18,14 +18,9 @@ select_aventureiro_nome = lambda dados = {} : f"""
 """
 
 # Requer nome_aventureiro = {"aventureiro_id": str} 
-select_aventureiro_id = lambda dados = {} : f"""
-    Select DISTINCT Aventureiros.aventureiro_id, Aventureiros.nome as nome_aventureiro, 
-        capcoins, cont_Hordas, cont_Sequencia, Idiomas.nome as nome_idioma
+script_select_aventureiro_id = lambda dados = {} : f"""
+    Select Aventureiros.aventureiro_id, Aventureiros.nome as aventureiro_nome, 
+        capcoins, cont_hordas_atual, cont_sequencia_atual
     FROM aventureiros_{dados["canal_id"]} AS aventureiros 
-    INNER JOIN ( Canais
-        INNER JOIN Idiomas
-        ON Canais.idioma = Idiomas.id )
-    ON Aventureiros.aventureiro_id = Canais.aventureiro_id
     WHERE Aventureiros.aventureiro_id = :aventureiro_id
-    ORDER BY Aventureiros.aventureiro_id 
 """

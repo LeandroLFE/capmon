@@ -30,8 +30,6 @@ class Nova_horda():
         await self.db.update_ativa_horda(dados_canal)  
         _nome_horda = await self.db.seleciona_horda_ativa_canal(dados_canal)
 
-        await self.db.update_tipo_hordas_reset(dados_canal)
-
         _nome_func_tipo_horda = f"""tipo_horda_{_nome_horda["nome"]}"""
         _func_tipo_horda = getattr(self, _nome_func_tipo_horda) 
         _dados_horda = await _func_tipo_horda(dados_canal)  
@@ -70,6 +68,8 @@ class Nova_horda():
             "nome_horda" : "normal_aleatoria",
             "criatura" : _criatura,
             "criaturas" : [],
+            "aventureiros" : [],
+            "capturados" : [],
             "capraid" : {},
             "duracao" : _duracao,
         }
@@ -96,6 +96,8 @@ class Nova_horda():
         dados_horda = {
             "nome_idioma" : dados_canal["nome_idioma"],
             "nome_horda" : "elemental",
+            "aventureiros" : [],
+            "capturados" : [],
             "capraid" : {},
             "duracao" : _duracao,
         }
@@ -140,6 +142,8 @@ class Nova_horda():
             "nome_horda" : "capraid",
             "criatura" : _criatura,
             "criaturas" : [],
+            "aventureiros" : [],
+            "capturados" : [],
             "capraid" : _capraid,
             "duracao" : _duracao,
         }
@@ -162,6 +166,8 @@ class Nova_horda():
             "nome_horda" : "normal_especifica",
             "criatura" : criatura,
             "criaturas" : [],
+            "aventureiros" : [],
+            "capturados" : [],
             "capraid" : {},
             "duracao" : _duracao,
         }

@@ -9,19 +9,17 @@ class Envia_Msg(Cog):
         self.db = Envia_MSG_Chat_DB_Connect()
 
     async def envia_msg_with_context(self, ctx, msg=''):
+        _canal_id = ctx.message.tags["room-id"]
+
         if isinstance(msg, str) == False or msg =='':
+            self.bot.logger = self.bot.set_logging(_canal_id)
             self.bot.logger.warning(f"Tipo errado msg: {type(msg)}") if isinstance(msg, str) == False else self.bot.logger.warning(f"Msg vazio: {msg}")
             return
-        
-        parametros = {}
 
+        parametros = {}
         parametros["channel_name"] = ctx.channel.name if self.bot.nick != ctx.channel.name else ctx.author.name
         
-        _channel_id = await self.db.consulta_channel_id({
-            "nome_canal" : parametros["channel_name"]
-        })
-
-        parametros["canal_id"] = _channel_id["canal_id"] if _channel_id != None else ctx.author.id
+        parametros["canal_id"] = _canal_id
         parametros["msg"] = msg
         
         _ultima_msg = await self.db.consulta_ultima_msg(parametros)
@@ -29,20 +27,24 @@ class Envia_Msg(Cog):
         _ultima_msg = _ultima_msg["msg"] if issubclass(type(_ultima_msg), dict) else _ultima_msg
 
         if _ultima_msg != None and type(_ultima_msg) != str:
+            self.bot.logger = self.bot.set_logging(parametros["canal_id"])
             self.bot.logger.warning(f"Tipo errado ultima_msg: {type(_ultima_msg)}")
             return
 
         if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
+            msg = f"""╠{"─"*30}╣ {msg} ╠{"─"*30}╣"""
             await ctx.send(msg)
             await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)
         else:
             data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
             msg_modificada = f'{msg} ({data_e_hora_em_texto})'
+            msg_modificada = f"""╠{"─"*30}╣ {msg_modificada} ╠{"─"*30}╣"""
             await ctx.send(msg_modificada)
 
         _info_msg = f"""Em resposta a {ctx.message.author.name} que enviou o comando: {ctx.message.content} no canal {ctx.message.channel.name}\nR: {parametros["msg"].strip()}"""
-        self.bot.logger[parametros["canal_id"]].info(_info_msg)
+        self.bot.logger = self.bot.set_logging(parametros["canal_id"])
+        self.bot.logger.info(self.bot.prepare_log(_info_msg))
 
     async def envia_msg_without_context(self, channel_data, msg=''):
         _msg =  f"""PRIVMSG #{channel_data["nome_canal"]} :{msg}\r\n"""
@@ -64,4 +66,5 @@ class Envia_Msg(Cog):
             _msg = f'{_msg} ({data_e_hora_em_texto})'
             await self.bot._connection.send(_msg)
 
-        self.bot.logger[parametros["canal_id"]].info(self.bot.prepare_log(_msg))
+        self.bot.logger = self.bot.set_logging(parametros["canal_id"])
+        self.bot.logger.info(self.bot.prepare_log(_msg))
