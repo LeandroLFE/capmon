@@ -88,7 +88,10 @@ select_criatura_especifica = lambda dados : f"""
     Criaturas.cp_min, Criaturas.cp_max, 
     Atr1.nome AS "nome_atributo1",
     Atr2.nome AS "nome_atributo2",
-    Criaturas.chance_especial,  
+    Pc.chance_especial,
+    Pc.chance_captura,
+    Pc.num_tentativas_caso_zero_ou_negativo,
+    Pc.cp_inicial,
     Criaturas.custo, 
     Criaturas.evolucao, 
     Criaturas.cp_limite, 
@@ -96,6 +99,8 @@ select_criatura_especifica = lambda dados : f"""
     FROM Criaturas 
     INNER JOIN Tipos
     ON Criaturas.tipo = Tipos.id
+    INNER JOIN Parametros_criaturas as Pc
+    ON Criaturas.parametro_criatura = Pc.id 
     INNER JOIN 
     (
     SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_atr1
@@ -113,7 +118,7 @@ select_criatura_especifica = lambda dados : f"""
     ) AS Atr2
     ON criaturas.atributo2 = Atr2.ref 
     AND criaturas.tipo = Atr2.tipo 
-    WHERE Criaturas.num = :id_criatura
+    WHERE Criaturas.num = :num_criatura
     AND Tipos.nome = :nome_tipo
     AND Atr1.nome_idioma_atr1 = :nome_idioma
     AND Atr2.nome_idioma_atr2 = :nome_idioma
