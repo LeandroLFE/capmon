@@ -48,22 +48,26 @@ class Final_horda():
         await self.db.update_tipo_hordas_elemental(_dados_canal)
         await self.db.update_tipo_hordas_capraid(_dados_canal)
 
-        if _dados_horda["capturados"] != []:
+        if _dados_horda["aventureiros"] != []:
             _parametros_aventureiro = await self.db.consulta_parametros_aventureiros_canal(dados_canal)
             _dados_horda["aventureiros"] = await self.atualiza_capcoins_aventureiros(_dados_horda["aventureiros"], _parametros_aventureiro)
             _dados_horda["aventureiros"][0]["canal_id"] = dados_canal["canal_id"]
             await self.db.insert_update_aventureiros(_dados_horda["aventureiros"])
 
+
+        if _dados_horda["capturados"] != []:
             _quem_capturou = [c for c in _dados_horda["capturados"] if c["id_criatura"] != 0]
 
             if _quem_capturou != []:
-                _dados_horda["capturados"][0]["canal_id"] = dados_canal["canal_id"]
+                _quem_capturou[0]["canal_id"] = dados_canal["canal_id"]
                 await self.db.insert_update_capturados(_quem_capturou)
 
-            await self.db.reset_cont_sequencia_outros_aventureiros({
-                "canal_id" : dados_canal["canal_id"],
-                "aventureiros_id" : ", ".join((a["aventureiro_id"] for a in _dados_horda["aventureiros"])) 
-            })
+        _aventureiros_id = ", ".join((a["aventureiro_id"] for a in _dados_horda["aventureiros"])) if _dados_horda["aventureiros"] != [] else '0'
+
+        await self.db.reset_cont_sequencia_outros_aventureiros({
+            "canal_id" : dados_canal["canal_id"],
+            "aventureiros_id" :  _aventureiros_id
+        })
 
         self.bot.dados_horda[dados_canal["canal_id"]]["nome_horda"] = ""
         _task = self.bot.loop.create_task(self.bot.aguarda(self, _tempo_para_proxima_horda))
