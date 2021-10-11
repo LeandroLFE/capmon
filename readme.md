@@ -57,8 +57,8 @@ Documentação (inglês) https://twitchio.readthedocs.io/en/latest/quickstart.ht
 
 # Execução
 
-- Arquivo setup_db.py -> setup do banco de dados
-- Arquivo capmon.py -> execução do bot
+- Arquivo setup_db.py -> setup do banco de dados (executar apenas 1 vez)
+- Arquivo app_bot.py -> execução do bot
 
 
 **Capmon Project - English**
@@ -121,5 +121,5 @@ Documentation https://twitchio.readthedocs.io/en/latest/quickstart.html
 
 # Run
 
-- File setup_db.py -> database setup 
-- File capmon.py -> execute bot
+- File setup_db.py -> database setup (execute 1 time only) 
+- File app_bot.py -> execute bot
