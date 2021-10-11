@@ -10,6 +10,7 @@ default_create_table_structure_items_obtidos = lambda dados = {} : f"""
     aventureiro_id text PRIMARY KEY,
     tipo_item int NOT NULL,
     id_item int NOT NULL DEFAULT 0,
+    qtde int NOT NULL DEFAULT 0,
     data_expiracao date NOT NULL default Now,
 
     FOREIGN KEY (aventureiro_id)
@@ -31,7 +32,7 @@ default_create_table_structure_capboard_dados = lambda dados = {} : f"""
 """
 
 default_create_table_structure_buddies = lambda dados = {} : f"""
-    aventureiro_id text PRIMARY KEY,
+    aventureiro_id text,
     id_criatura int NOT NULL,
     cont_Hordas_atual int NOT NULL DEFAULT 0,
 
@@ -39,7 +40,6 @@ default_create_table_structure_buddies = lambda dados = {} : f"""
         REFERENCES Aventureiros_{dados["canal_id"]} (aventureiro_id),
     FOREIGN KEY (id_criatura)
         REFERENCES Criaturas(id),
-
     PRIMARY KEY (aventureiro_id, id_criatura)
 """
 
@@ -61,7 +61,7 @@ default_create_table_structure_horda = lambda dados = {} : """
 """
 
 
-default_create_table_structure_capturados = lambda dados = {} : """
+default_create_table_structure_capturados = lambda dados = {} : f"""
     id_criatura INTEGER,
     aventureiro_id text,
     cp int NOT NULL,
@@ -70,8 +70,8 @@ default_create_table_structure_capturados = lambda dados = {} : """
     origem int,
 
     FOREIGN KEY (id_criatura)
-        REFERENCES criaturas (id),
+        REFERENCES Criaturas (id),
     FOREIGN KEY (aventureiro_id)
-        REFERENCES aventureiros (aventureiro_id),
+        REFERENCES Aventureiros_{dados["canal_id"]} (aventureiro_id),
     PRIMARY KEY(id_criatura, aventureiro_id) 
 """

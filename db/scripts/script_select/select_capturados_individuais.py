@@ -171,7 +171,7 @@ select_capturados_aventureiro_nome = lambda dados : f"""
     ON criaturas.atributo2 = Atr2.ref 
     AND criaturas.tipo = Atr2.tipo 
     INNER JOIN Capturados_{dados["canal_id"]} as Capturados 
-    ON Criaturas.id = Capturados.id_criatura
+    ON Criaturas.id = Capturados.origem
     INNER JOIN 
     (
         SELECT Atributos.nome, Atributos.ref, Atributos.tipo, Idiomas.nome as nome_idioma_golpe

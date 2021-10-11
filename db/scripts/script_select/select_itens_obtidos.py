@@ -1,6 +1,15 @@
+"""
+Requer:
+{
+    "canal_id" : str,
+    "aventureiro_id" : str,
+    "nome_idioma" : str
+}
+"""
+
 select_itens_obtidos_aventureiro_canal = lambda dados = "" : f"""
-    Select IC.id, IC.id_item_capshop, IC.nome, IC.abreviacao, IC.custo_em_capcoins, IC.descricao, 
-    IC.valor_efeito, Comandos_uso_itens_capshop.comando, IC.item_capshop_plus, Itens_obtidos.data_expiracao
+    Select IC.id, IC.id_item_capshop, IC.nome, IC.abreviacao, IC.custo_em_capcoins, Itens_obtidos.qtde, IC.descricao, 
+    IC.valor_do_efeito, Comandos_uso_itens_capshop.comando, IC.item_capshop_plus, Itens_obtidos.data_expiracao
     FROM Comandos_uso_itens_capshop
     INNER JOIN Itens_capshop as IC
     ON Comandos_uso_itens_capshop.id = IC.comando_uso_item

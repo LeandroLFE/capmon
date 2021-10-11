@@ -14,7 +14,7 @@ Requer: {
 script_insert_update_capturados = lambda dados = {} : f"""
     INSERT INTO Capturados_{dados["canal_id"]} (id_criatura, aventureiro_id, cp, golpe, especial, origem) 
     VALUES (:id_criatura, :aventureiro_id, :cp, (
-        SELECT id 
+        SELECT ref 
         FROM Atributos
         WHERE LOWER(nome) = LOWER(:golpe)
     ), :especial, :id_criatura) 
@@ -22,7 +22,7 @@ script_insert_update_capturados = lambda dados = {} : f"""
     UPDATE 
     SET cp = :cp, 
     golpe = (
-        SELECT id 
+        SELECT ref 
         FROM Atributos
         WHERE LOWER(nome) = LOWER(:golpe)
     ), 

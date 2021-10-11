@@ -1,6 +1,6 @@
-# Requer nome_aventureiro = {"nome_aventureiro" : str}
+# Requer {"canal_id" : str, "aventureiro_id" : str}
 select_capcoins = lambda dados : f"""
     Select capcoins
-    FROM aventureiros_{dados["nome_canal"]} AS aventureiros 
-    Where Nome = :nome_aventureiro 
+    FROM aventureiros_{dados["canal_id"]} AS aventureiros 
+    Where aventureiro_id = :aventureiro_id 
 """
