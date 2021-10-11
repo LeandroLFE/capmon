@@ -6,4 +6,6 @@ def set_logging(canal_id):
     _nome_arquivo = f"logs/bot_{canal_id}"
     log_config = config({"filename":_nome_arquivo})
     dictConfig(log_config)
-    return getLogger(_nome_arquivo,)
+    auxLogger = getLogger(_nome_arquivo,)
+    auxLogger.disabled = False
+    return auxLogger
