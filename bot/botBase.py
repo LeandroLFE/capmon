@@ -10,16 +10,28 @@ class BotBase(Bot):
 
     async def event_error(self, error: Exception, data: str):
         self.logger = self.set_logging("errors")
-        self.logger.error(f"Erro: {error.args} -> {data}")
+        self.logger.error(f"Event error: {error.args} -> {data}")
 
     async def event_command_error(self, ctx, error):
-        if isinstance(error, CommandNotFound):
-            pass       
+        if type(error) == CommandNotFound:
+            return      
         self.logger = self.set_logging("errors")
-        self.logger.error(f"Erro: {error.args}")
+        self.logger.error(f"Event command error: {error.args}")
 
     async def event_message(self, message):
-        if message.author.name.lower() == self.nick.lower():
+        try:
+            if message.author.name == self.nick:
+                return
+        
+        except Exception as e:
+            if message == None:
+                return
+            if message.author == None:
+                return
+            self.logger = self.set_logging("errors")
+            self.logger.error(f"Event message error: {e.args}")
             return
-        message.content = self.remover_acentos(message.content).lower()
-        await self.handle_commands(message)
+
+        else:
+            message.content = self.remover_acentos(message.content).lower()
+            await self.handle_commands(message)

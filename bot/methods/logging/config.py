@@ -30,12 +30,10 @@ config = lambda dados : {
         'loggers': {
             dados['filename']: {
                 'handlers': ['file'],
-                'disable' : False,
             },
         },
         'root': {
             'level': 'DEBUG',
             'handlers': ['console'],
-            'disable' : False,
         },
     }
