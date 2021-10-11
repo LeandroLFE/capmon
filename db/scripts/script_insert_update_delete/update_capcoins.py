@@ -1,13 +1,13 @@
 '''
 Requer: {
-    "nome_canal" : str,
-    "aventureiro_capcoins" : int,
-    "aventureiro_nome" : str,
+    "canal_id" : str,
+    "capcoins" : int,
+    "aventureiro_id" : str,
 }
 '''
 
-update_capcoins = lambda dados : f"""
+script_update_capcoins = lambda dados : f"""
     UPDATE aventureiros_{dados["canal_id"]} 
-    SET capcoins = :aventureiro_capcoins
-    WHERE Nome = :aventureiro_nome
+    SET capcoins = :capcoins
+    WHERE aventureiro_id = :aventureiro_id
 """

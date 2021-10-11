@@ -4,7 +4,7 @@ script_select_aventureiros = lambda dados = {}: f"""
     ORDER BY aventureiro_id 
 """
 
-# Requer nome_aventureiro = {"canal_id" : str, "nome_aventureiro": str}
+# Requer nome_aventureiro = {"canal_id" : str, "aventureiro_nome": str}
 script_select_aventureiro_nome = lambda dados = {}: f"""
     Select Aventureiros.aventureiro_id, Aventureiros.nome as nome_aventureiro, 
         capcoins, cont_hordas_atual, cont_sequencia_atual
