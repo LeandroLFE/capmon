@@ -1,7 +1,6 @@
 from bot.cogs.commands.user_channel.cap_aux.cap_db_connect import Cap_DB_Connect
 from twitchio.ext.commands import Cog, command
 
-
 class Cap(Cog):
 
     def __init__(self, bot):
@@ -118,7 +117,7 @@ class Cap(Cog):
         if _criatura_ja_capturada == None:
             _ja_capturou_antes = False
             _criatura_ja_capturada = {
-                "cp": _parametros_criatura["cp_inicial"],
+                "cp": 0,
                 "especial": _capturou_especial
             }
 
@@ -165,6 +164,8 @@ class Cap(Cog):
 
         tentativas = int(tentativas)
 
+        _dados_aventureiro["tentativas"] = tentativas
+
         if tentativas < 0:
             tentativas = _parametros_criatura["num_tentativas_caso_zero_ou_negativo"]
 
@@ -172,19 +173,12 @@ class Cap(Cog):
 
             _dados_horda["aventureiros"].append(_dados_aventureiro)
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
-                                                                   "user_channel", "cap_messages", "error_invalid_attempties",
-                                                                   {
-                "nome_horda": _dados_horda["nome_horda"],
-                "aventureiro": _aventureiro_nome,
-                "custo": _custo,
-                "criaturas": _dados_horda["criaturas"]
-            })
+                                                                   "user_channel", "cap_messages", "cap_command_skip_message",
+                                                                   _dados_horda)
             await self.envia_msg_with_context(ctx, self.message)
             return
 
         _custo_capcoins = tentativas * _criatura["custo"]
-
-        _dados_aventureiro["tentativas"] = tentativas
 
         if _custo_capcoins > _aventureiro["capcoins"]:
             self.message = self.bot.import_message_language_by_one(_dados_canal["nome_idioma"],
@@ -231,8 +225,9 @@ class Cap(Cog):
             _atributo = self.bot.random_choice([_dados_horda["criatura"]["nome_atributo1"], _dados_horda["criatura"]["nome_atributo2"]
                                                 ]) if _dados_horda["criatura"]["nome_atributo2"] != None else _dados_horda["criatura"]["nome_atributo1"]
 
-            _cp = self.bot.randint(
-                _dados_horda["criatura"]["cp_min"], _dados_horda["criatura"]["cp_max"]) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]
+            _cp = _dados_horda["criatura_ja_capturada"]["cp"] + ( self.bot.random_randint(
+                  _dados_horda["criatura"]["cp_min"] * 0.1, _dados_horda["criatura"]["cp_max"] * 0.1)) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]
+            _cp = _cp if _cp <= _dados_horda["criatura"]["cp_limite"] else _dados_horda["criatura"]["cp_limite"]
 
             _capturado = {
                 "aventureiro_id": _aventureiro_id,
