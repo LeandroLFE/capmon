@@ -53,11 +53,7 @@ class Nova_horda():
        
     async def tipo_horda_normal_aleatoria(self, dados_canal):
 
-        # _criatura = await self.db.seleciona_criatura_aleatoria(dados_canal)
-        dados_canal["num_criatura"] = 1
-        dados_canal["nome_tipo"] = 'pokemon'
-
-        _criatura = await self.db.seleciona_criatura_especifica(dados_canal)
+        _criatura = await self.db.seleciona_criatura_aleatoria(dados_canal)
 
         _parametros_horda = self.bot.parametros_horda[dados_canal["canal_id"]] 
 
