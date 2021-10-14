@@ -1,7 +1,7 @@
 from db.connect.instanciaAtualDB import atualDB
 from db.scripts.script_select.select_parametros_canal import select_parametros_hordas_canal
 
-class Event_Ready_DB_Connect():
+class Event_Join_DB_Connect():
 
     def __init__(self) -> None:
         pass

@@ -1,6 +1,6 @@
 from twitchio.ext.commands import Cog
 from typing import Callable
-from bot.cogs.events.eventJoin_aux.eventJoin_db_connect import Event_Ready_DB_Connect
+from bot.cogs.events.eventJoin_aux.eventJoin_db_connect import Event_Join_DB_Connect
 from bot.messages.general.task_names.nomes_tasks import task_nova_horda_sync
 
 class EventJoin(Cog):
@@ -8,7 +8,7 @@ class EventJoin(Cog):
     def __init__(self, bot: Callable):
         super().__init__()
         self.bot = bot
-        self.db = Event_Ready_DB_Connect()
+        self.db = Event_Join_DB_Connect()
         self.nome_task_nova_horda_sync = task_nova_horda_sync
 
     @Cog.event()

@@ -84,6 +84,7 @@ select_criatura_aleatoria_lendaria = lambda dados : f"""
     AND Criaturas.custo = 5 
     AND Atr1.nome_idioma_atr1 = :nome_idioma
     AND Atr2.nome_idioma_atr2 = :nome_idioma
+    ORDER BY RANDOM() 
     LIMIT 1
 """
 
