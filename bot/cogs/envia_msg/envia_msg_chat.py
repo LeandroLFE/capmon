@@ -7,6 +7,31 @@ class Envia_Msg(Cog):
     def __init__(self, bot: Callable) -> None:
         self.bot = bot
         self.db = Envia_MSG_Chat_DB_Connect()
+        self.max_msg_length = 400
+
+
+    async def envia_msg_whisper(self, ctx, msg=''):
+        _canal_id = ctx.message.tags["room-id"]
+        _canal_name = ctx.channel.name
+        _author_name = ctx.author.name
+
+        _whisper = f"""PRIVMSG #{_canal_name} :/w {_author_name} {'-'*38}"""
+        _msg=  f"""{_whisper} {msg}\r\n"""
+
+        while len(_msg) >= self.max_msg_length:
+            _msg_test = _msg[:self.max_msg_length]
+            indice = _msg_test.rfind('->')
+            _msg_print = _msg_test[:indice-4] if indice > -1 else _msg_test
+            await self.bot._connection.send(_msg_print)
+            self.bot.logger = self.bot.set_logging(_canal_id)
+            self.bot.logger.info(self.bot.prepare_log(_msg_print))
+            _msg = _msg[indice-4:]
+            _msg =  f"""{_whisper} {_msg}\r\n"""    
+            
+        else:
+            await self.bot._connection.send(_msg)
+            self.bot.logger = self.bot.set_logging(_canal_id)
+            self.bot.logger.info(self.bot.prepare_log(_msg))
 
     async def envia_msg_with_context(self, ctx, msg=''):
         _canal_id = ctx.message.tags["room-id"]
