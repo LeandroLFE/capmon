@@ -6,6 +6,7 @@ from bot.cogs.loop_hordas.geraHordas import GeraHordas
 from bot.cogs.commands.bot_channel.capaventura import Capaventura
 from bot.cogs.commands.user_channel.cap import Cap
 from bot.cogs.commands.user_channel.capcoins import Capcoins
+from bot.cogs.commands.user_channel.capshop import Capshop
 
 cogs = []
 cogs.append(EventReady)
@@ -15,6 +16,7 @@ cogs.append(GeraHordas)
 cogs.append(Capaventura)
 cogs.append(Cap)
 cogs.append(Capcoins)
+cogs.append(Capshop)
 
 def prepare(bot: Bot, cogs: list):
     for cog in cogs:
