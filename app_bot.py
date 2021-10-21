@@ -7,6 +7,8 @@ from bot.cogs.commands.bot_channel.capaventura import Capaventura
 from bot.cogs.commands.user_channel.cap import Cap
 from bot.cogs.commands.user_channel.capcoins import Capcoins
 from bot.cogs.commands.user_channel.capshop import Capshop
+from bot.cogs.commands.whispers.capend import Capend
+from bot.cogs.commands.whispers.capbuy import Capbuy
 
 cogs = []
 cogs.append(EventReady)
@@ -17,6 +19,8 @@ cogs.append(Capaventura)
 cogs.append(Cap)
 cogs.append(Capcoins)
 cogs.append(Capshop)
+cogs.append(Capbuy)
+cogs.append(Capend)
 
 def prepare(bot: Bot, cogs: list):
     for cog in cogs:
