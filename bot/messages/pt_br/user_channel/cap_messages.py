@@ -11,7 +11,7 @@ def cap_command_skip_message(
 
 def cap_command_capture_messages(dados):
     _item = "" if dados["dados_horda"]["dados_aventureiro"][
-        "item"] == "" else f"""usou o item {dados["dados_horda"]["dados_aventureiro"]['item']} e """
+        "item_utilizado"]["nome"] == "" else f"""usou o item {dados["dados_horda"]["dados_aventureiro"]['item_utilizado']["nome"]} e """
     if not dados["dados_horda"]["dados_aventureiro"]["capturou"]:
         return f"""{dados["dados_horda"]["dados_aventureiro"]["nome"]} {_item}tentou capturar a criatura {dados["dados_horda"]["criatura"]["nome_tipo"]} {dados["dados_horda"]["criatura"]["nome"]}, mas fugiu! Capcoins utilizados: {dados["dados_horda"]["criatura"]["custo"] * dados["dados_horda"]["dados_aventureiro"]["tentativas"]} """
 
@@ -20,7 +20,7 @@ def cap_command_capture_messages(dados):
     _pronta_evoluir = "" if _criatura_ja_capturada["cp"] + dados["dados_horda"]["capturado"]["cp"] < dados["dados_horda"][
         "criatura"]["cp_limite"] else "A criatura está pronta pra evoluir, você pode obter o item capevol ou capevol+ no capshop"
 
-    return f"""{dados["dados_horda"]["dados_aventureiro"]["nome"]} conseguiu capturar a criatura {dados["dados_horda"]["criatura"]["nome_tipo"]} {dados["dados_horda"]["criatura"]["nome"]}{_especial} Capcoins utilizados: {dados["dados_horda"]["criatura"]["custo"] * dados["dados_horda"]["dados_aventureiro"]["tentativas"]} {_pronta_evoluir}"""
+    return f"""{dados["dados_horda"]["dados_aventureiro"]["nome"]} {_item}conseguiu capturar a criatura {dados["dados_horda"]["criatura"]["nome_tipo"]} {dados["dados_horda"]["criatura"]["nome"]}{_especial} Capcoins utilizados: {dados["dados_horda"]["criatura"]["custo"] * dados["dados_horda"]["dados_aventureiro"]["tentativas"]} {_pronta_evoluir}"""
 
 
 def error_horde_inactive(
