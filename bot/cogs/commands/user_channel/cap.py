@@ -1,6 +1,7 @@
 from bot.cogs.commands.user_channel.cap_aux.cap_db_connect import Cap_DB_Connect
 from twitchio.ext.commands import Cog, command
 
+
 class Cap(Cog):
 
     def __init__(self, bot):
@@ -64,6 +65,9 @@ class Cap(Cog):
 
         _criatura = _criatura[0] if _criatura != [] else {}
 
+        _item_usado = criatura_item
+
+        # Horda elemental
         if _dados_horda["criaturas"] != [] and _criatura == {}:
 
             _opcoes = [self.bot.remover_acentos(
@@ -80,6 +84,7 @@ class Cap(Cog):
 
         elif _dados_horda["criaturas"] != []:
             _dados_horda["criatura"] = _criatura
+            _item_usado = item
 
         _custo = _dados_horda["criatura"]["custo"]
 
@@ -87,10 +92,13 @@ class Cap(Cog):
             "aventureiro_id": _aventureiro_id,
             "nome": _aventureiro_nome,
             "ctx": ctx,
-            "capcoins" : _aventureiro["capcoins"],
+            "capcoins": _aventureiro["capcoins"],
             "tentativas": tentativas,
             "criatura_item": criatura_item,
             "item": item,
+            "item_utilizado": {
+                "nome": "",
+            },
             "capturou": False,
             "tabela": _aventureiro
         }
@@ -153,14 +161,14 @@ class Cap(Cog):
             return
 
         _capturado = {
-                "aventureiro_id": _aventureiro_id,
-                "id_criatura": 0,
-                "cp": 0,
-                "golpe": 0,
-                "criatura_tipo": 0,
-                "custo_capcoins": 0,
-                "especial": 0,
-            }
+            "aventureiro_id": _aventureiro_id,
+            "id_criatura": 0,
+            "cp": 0,
+            "golpe": 0,
+            "criatura_tipo": 0,
+            "custo_capcoins": 0,
+            "especial": 0,
+        }
 
         tentativas = int(tentativas)
 
@@ -200,12 +208,37 @@ class Cap(Cog):
                 _chance_captura += _vantagens_subs_canal["aumento_chance_captura"]
                 _chance_especial += _vantagens_subs_canal["aumento_chance_especial"]
 
-        if _dados_aventureiro["item"] != '':
-            _itens_obtidos = await self.db.consulta_itens_obtidos({
+        _item = None
+        _uso_item_special = False
+
+        if _item_usado != '':
+            _item = await self.db.consulta_uso_item_capshop({
                 "aventureiro_id": _aventureiro_id,
                 "canal_id": _dados_canal["canal_id"],
                 "nome_idioma": _dados_canal["nome_idioma"],
+                "comando": "cap",
+                "abreviacao": _item_usado,
             })
+
+            if _item != None:
+                _dados_aventureiro["item_utilizado"] = _item
+                _chance_captura += _item["valor_do_efeito"] if "chance" in _item["nome"].lower(
+                ) else 0
+                if "special" in _item["nome"].lower():
+                    _uso_item_special = True
+                    _chance_especial += _item["valor_do_efeito"]
+
+                await self.db.atualiza_item_gasto({
+                    "canal_id": _canal_id,
+                    "aventureiro_id": _aventureiro_id,
+                    "tipo_item": _item["tipo_item"],
+                    "id_item": _item["id"],
+                    "qtde_utilizada": 1,
+                })
+                await self.db.deleta_itens_sem_qtde_capshop({
+                    "canal_id" : _canal_id,
+                    "id_item": _item["id"],
+                })
 
         for _ in range(tentativas):
             _sorteio_captura = self.bot.random_randint(1, 100)
@@ -213,20 +246,27 @@ class Cap(Cog):
                 _capturou = True
                 break
 
-        _dados_aventureiro["capcoins"] -=  _custo_capcoins
+        _dados_aventureiro["capcoins"] -= _custo_capcoins
 
         if _capturou:
 
             _sorteio_especial = self.bot.random_randint(1, 100)
 
-            if _sorteio_especial <= _chance_especial:
-                _capturou_especial = True
+            if not _uso_item_special:
+                if _sorteio_especial <= _chance_especial:
+                    _capturou_especial = True
+            else:
+                for _ in range(tentativas):
+                    if _sorteio_especial <= _chance_especial:
+                        _capturou_especial = True
+                        break
+                    _sorteio_especial = self.bot.random_randint(1, 100)
 
             _atributo = self.bot.random_choice([_dados_horda["criatura"]["nome_atributo1"], _dados_horda["criatura"]["nome_atributo2"]
                                                 ]) if _dados_horda["criatura"]["nome_atributo2"] != None else _dados_horda["criatura"]["nome_atributo1"]
 
-            _cp = _dados_horda["criatura_ja_capturada"]["cp"] + ( self.bot.random_randint(
-                  _dados_horda["criatura"]["cp_min"] * 0.1, _dados_horda["criatura"]["cp_max"] * 0.1)) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]
+            _cp = _dados_horda["criatura_ja_capturada"]["cp"] + (self.bot.random_randint(
+                _dados_horda["criatura"]["cp_min"] * 0.1, _dados_horda["criatura"]["cp_max"] * 0.1)) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]
             _cp = _cp if _cp <= _dados_horda["criatura"]["cp_limite"] else _dados_horda["criatura"]["cp_limite"]
 
             _capturado = {
@@ -255,5 +295,3 @@ class Cap(Cog):
                                                                "user_channel", "cap_messages", "cap_command_capture_messages",
                                                                dados)
         await self.envia_msg_with_context(ctx, self.message)
-
-    

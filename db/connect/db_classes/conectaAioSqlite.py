@@ -47,7 +47,7 @@ class ConectaAioSQLite(ConectaDB):
     def delete_table(self, func : object)->object:
         botPatch = self.path
         async def _delete_table(self: object, dados: dict = {})->None:
-            with connect(botPatch) as db:
+            async with connect(botPatch) as db:
                 script = await func(self, dados)
                 await db.execute(script, dados)
                 await db.commit()

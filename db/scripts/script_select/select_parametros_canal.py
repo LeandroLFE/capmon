@@ -3,6 +3,20 @@ Requer: {
     "canal_id" : str
 }
 '''
+select_parametros_gerais_canal = lambda dados = "" : """
+    Select Pg.tamanho_max_msgs, Pg.tempo_sessao_capshop, Pg.tempo_sessao_capmon, 
+    Pg.tempo_espera_obter_capmove, Pg.tempo_capbattle, Pg.cooldown_capbattle
+    FROM Canais
+    INNER JOIN Parametros_gerais as Pg
+    ON Canais.parametros_gerais = Pg.id
+    WHERE Canais.canal_id = :canal_id
+"""
+
+'''
+Requer: {
+    "canal_id" : str
+}
+'''
 select_parametros_capboard_canal = lambda dados = "" : """
     Select Pc.add_vitoria, Pc.add_derrota, Pc.add_empate,
     Pc.capcoins_primeiro, Pc.capcoins_segundo, Pc.capcoins_terceiro

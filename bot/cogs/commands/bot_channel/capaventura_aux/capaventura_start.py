@@ -24,9 +24,9 @@ async def capaventura_start(self, ctx, idioma_canal):
             "bot_channel", "capmon_channel_messages", "capmon_channel_messages_normal", 
             {"aventureiro":_aventureiro})
 
+            await self.db.insert_canais(dados) if canal == None else await self.db.update_canais(dados)
             await self.db.create_tables_with_underline_adventurer_name(dados)
             await self.db.insert_aventureiro(dados)
-            await self.db.insert_canais(dados) if canal == None else await self.db.update_canais(dados)
             await self.db.insert_tipo_hordas_canal(self.dados_padrao_tabela_tipo_hordas(dados))
             await self.db.insert_hordas_canal(dados)
             await self.envia_msg_with_context(ctx, self.messages["start"])

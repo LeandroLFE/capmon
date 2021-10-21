@@ -33,6 +33,7 @@ class EventReady(Cog):
         self.bot.functools_partial = partial
         self.bot.datetime = datetime
         self.bot.set_logging = set_logging
+        self.bot.sessao_ativa = {}
 
     @Cog.event()
     async def event_ready(self):    

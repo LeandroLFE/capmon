@@ -6,13 +6,14 @@ default_create_table_structure_aventureiros = lambda dados = {} : """
     cont_sequencia_atual int NOT NULL DEFAULT 0
 """
 
-default_create_table_structure_items_obtidos = lambda dados = {} : f"""
-    aventureiro_id text PRIMARY KEY,
+default_create_table_structure_itens_obtidos = lambda dados = {} : f"""
+    aventureiro_id text,
     tipo_item int NOT NULL,
-    id_item int NOT NULL DEFAULT 0,
-    qtde int NOT NULL DEFAULT 0,
-    data_expiracao date NOT NULL default Now,
+    id_item int NOT NULL,
+    qtde int NOT NULL DEFAULT 1,
+    data_expiracao date NOT NULL,
 
+    PRIMARY KEY (aventureiro_id, tipo_item, id_item),
     FOREIGN KEY (aventureiro_id)
         REFERENCES Aventureiros_{dados["canal_id"]}(aventureiro_id),
     FOREIGN KEY (tipo_item)

@@ -10,6 +10,7 @@ script_create_table_canais = lambda dados = {} : """
         parametros_capboard int NOT NULL DEFAULT 1,
         parametros_hordas int NOT NULL DEFAULT 1,
         parametros_aventureiros int NOT NULL DEFAULT 1,
+        parametros_gerais int NOT NULL DEFAULT 1,
         
         PRIMARY KEY (canal_id),
         FOREIGN KEY (idioma)
@@ -17,8 +18,10 @@ script_create_table_canais = lambda dados = {} : """
         FOREIGN KEY (parametros_aventureiros)
             REFERENCES Parametros_aventureiros(id),
         FOREIGN KEY (parametros_capboard)
-            REFERENCES Parametros_capboard(parametros_capboard),
+            REFERENCES Parametros_capboard(id),
         FOREIGN KEY (parametros_hordas)
-            REFERENCES Parametros_hordas(parametros_horda)
+            REFERENCES Parametros_hordas(id),
+        FOREIGN KEY (parametros_gerais)
+            REFERENCES Parametros_gerais(id)
     );
 """

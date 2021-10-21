@@ -1,8 +1,8 @@
 from db.connect.instanciaAtualDB import atualDB
 from db.scripts.script_select.select_aventureiros import script_select_aventureiro_id
 from db.scripts.script_select.select_vantagens_subs_canal import select_vantagens_subs_canal
-from db.scripts.script_select.select_itens_obtidos import select_itens_obtidos_aventureiro_canal
 from db.scripts.script_select.select_itens_capshop import script_select_itens_capshop
+from db.scripts.script_select.select_parametros_canal import select_parametros_gerais_canal
 from db.scripts.script_insert_update_delete.insert_aventureiros import script_insert_aventureiros
 
 class Capshop_DB_Connect():
@@ -20,10 +20,10 @@ class Capshop_DB_Connect():
         _select_vantagens_subs_canal = select_vantagens_subs_canal(dados)
         return _select_vantagens_subs_canal 
 
-    @atualDB.select_table_many_data
-    async def consulta_itens_obtidos(self, dados={}):
-        _consulta_itens_obtidos = select_itens_obtidos_aventureiro_canal(dados)
-        return _consulta_itens_obtidos
+    @atualDB.select_table_one_data
+    async def consulta_parametros_gerais(self, dados = {}):
+        _consulta_parametros_gerais = select_parametros_gerais_canal(dados)
+        return _consulta_parametros_gerais
 
     @atualDB.select_table_many_data
     async def consulta_itens_capshop(self, dados={}):

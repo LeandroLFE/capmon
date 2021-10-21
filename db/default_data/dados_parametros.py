@@ -162,3 +162,30 @@ dados_padrao_tabela_parametros_capboard = lambda dados = {} : {
     "capcoins_segundo":10, 
     "capcoins_terceiro":5
 }
+
+script_create_table_parametros_gerais = lambda dados = {} : """
+    DROP TABLE IF EXISTS Parametros_gerais;
+
+    CREATE TABLE Parametros_gerais (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        tamanho_max_msgs int NOT NULL,
+        tempo_sessao_capshop int NOT NULL,
+        tempo_sessao_capmon int NOT NULL,
+        tempo_espera_obter_capmove int NOT NULL,
+        tempo_capbattle int NOT NULL,
+        cooldown_capbattle int NOT NULL
+    );
+"""
+script_insert_table_parametros_gerais = lambda dados = {} : """
+    INSERT INTO Parametros_gerais (tamanho_max_msgs, tempo_sessao_capshop, tempo_sessao_capmon, tempo_espera_obter_capmove, tempo_capbattle, cooldown_capbattle) 
+    VALUES (:tamanho_max_msgs, :tempo_sessao_capshop, :tempo_sessao_capmon, :tempo_espera_obter_capmove, :tempo_capbattle, :cooldown_capbattle);
+"""
+
+dados_padrao_tabela_parametros_gerais = lambda dados = {} : {    
+    "tamanho_max_msgs": 400, 
+    "tempo_sessao_capshop": 120,
+    "tempo_sessao_capmon": 120,
+    "tempo_espera_obter_capmove":80, 
+    "tempo_capbattle" : 90,
+    "cooldown_capbattle":10, 
+}

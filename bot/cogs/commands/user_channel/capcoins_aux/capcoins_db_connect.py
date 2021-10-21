@@ -1,6 +1,6 @@
 from db.connect.instanciaAtualDB import atualDB
 from db.scripts.script_select.select_capcoins import select_capcoins
-from db.scripts.script_select.select_itens_obtidos import select_itens_obtidos_aventureiro_canal
+from db.scripts.script_select.select_itens_obtidos import select_itens_obtidos_capshop_aventureiro_canal, select_itens_obtidos_capraid_aventureiro_canal
 from db.scripts.script_insert_update_delete.insert_aventureiros import script_insert_aventureiros
 from db.scripts.script_insert_update_delete.update_capcoins import script_update_capcoins
 from db.scripts.script_select.select_aventureiros import script_select_aventureiro_nome
@@ -16,8 +16,13 @@ class Capcoins_DB_Connect():
         return _consulta_capcoins
 
     @atualDB.select_table_many_data
-    async def consulta_itens_obtidos(self, dados={}):
-        _consulta_itens_obtidos = select_itens_obtidos_aventureiro_canal(dados)
+    async def consulta_itens_obtidos_capshop(self, dados={}):
+        _consulta_itens_obtidos = select_itens_obtidos_capshop_aventureiro_canal(dados)
+        return _consulta_itens_obtidos
+
+    @atualDB.select_table_many_data
+    async def consulta_itens_obtidos_capraid(self, dados={}):
+        _consulta_itens_obtidos = select_itens_obtidos_capraid_aventureiro_canal(dados)
         return _consulta_itens_obtidos
 
     @atualDB.select_table_one_data

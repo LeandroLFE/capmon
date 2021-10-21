@@ -1,7 +1,7 @@
 from auth.auth import db_location, db_name
 
 from db.connect.db_classes.conectaSQLite import ConectaSQLite
-from db.default_data.dados_parametros import script_create_table_parametros_aventureiros, script_create_table_parametros_buddies, script_create_table_parametros_capboard, script_create_table_parametros_hordas, script_create_table_parametros_criaturas, script_insert_table_parametros_criaturas, dados_padrao_tabela_parametros_criaturas, script_insert_table_parametros_aventureiros, script_insert_table_parametros_buddies, script_insert_table_parametros_capboard, script_insert_table_parametros_hordas, dados_padrao_tabela_parametros_aventureiros, dados_padrao_tabela_parametros_buddies, dados_padrao_tabela_parametros_capboard, dados_padrao_tabela_parametros_hordas
+from db.default_data.dados_parametros import script_create_table_parametros_aventureiros, script_create_table_parametros_buddies, script_create_table_parametros_capboard, script_create_table_parametros_hordas, script_create_table_parametros_criaturas, script_insert_table_parametros_criaturas, dados_padrao_tabela_parametros_criaturas, script_insert_table_parametros_aventureiros, script_insert_table_parametros_buddies, script_insert_table_parametros_capboard, script_insert_table_parametros_hordas, dados_padrao_tabela_parametros_aventureiros, dados_padrao_tabela_parametros_buddies, dados_padrao_tabela_parametros_capboard, dados_padrao_tabela_parametros_hordas, script_create_table_parametros_gerais, script_insert_table_parametros_gerais, dados_padrao_tabela_parametros_gerais
 from db.default_data.dados_vantagens_subs_perfis import script_create_table_vantagens_subs, script_insert_table_vantagens_subs, dados_padrao_tabela_vantagens_subs
 from db.default_data.dados_tipos import script_create_table_tipos, script_insert_table_tipos, dados_padrao_tabela_tipos
 from db.default_data.dados_idiomas import script_create_table_idiomas, script_insert_table_idiomas, dados_padrao_tabela_idiomas
@@ -24,57 +24,57 @@ class Setup():
 
     @db.create_or_drop_table
     def create_table_idiomas(self, dados : str = ""): 
-        return script_create_table_idiomas()
+        return script_create_table_idiomas(dados)
 
     @db.insert_table_many_lines
     def insert_table_idiomas(self, dados : dict = {}):
-        return script_insert_table_idiomas()
+        return script_insert_table_idiomas(dados)
 
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_tipo_itens(self, dados ={}):
-        return script_create_table_tipo_itens()
+        return script_create_table_tipo_itens(dados)
 
     @db.create_or_drop_table
     def create_table_tipo_hordas(self, dados={}):
-        return script_create_table_tipo_hordas()
+        return script_create_table_tipo_hordas(dados)
 
     @db.insert_table_many_lines
     def insert_table_tipo_hordas(self, dados : dict = {}):
-        return script_insert_table_tipo_hordas()
+        return script_insert_table_tipo_hordas(dados)
 
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_comandos_uso_itens_capshop(self, dados={}):
-        return script_create_table_comandos_uso_itens_capshop()
+        return script_create_table_comandos_uso_itens_capshop(dados)
 
     @db.insert_table_many_lines
     def insert_table_comandos_uso_itens_capshop(self, dados : dict = {}):
-        return script_insert_table_comandos_uso_itens_capshop()
+        return script_insert_table_comandos_uso_itens_capshop(dados)
 
     @db.create_or_drop_table
     def create_table_itens_capshop(self, dados={}):
-        return script_create_table_itens_capshop()
+        return script_create_table_itens_capshop(dados)
 
     @db.insert_table_many_lines
     def insert_table_itens_capshop(self, dados : dict = {}):
-        return script_insert_table_itens_capshop()
+        return script_insert_table_itens_capshop(dados)
 
     @db.create_or_drop_table
     def create_table_itens_capraid(self, dados={}):
-        return script_create_table_itens_capraid()
+        return script_create_table_itens_capraid(dados)
 
     @db.insert_table_many_lines
     def insert_table_itens_capraid(self, dados : dict = {}):
-        return script_insert_table_itens_capraid()
+        return script_insert_table_itens_capraid(dados)
 
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_vantagens_subs_perfis(self, dados={}):
-        return script_create_table_vantagens_subs()
+        return script_create_table_vantagens_subs(dados)
 
     @db.insert_table_one_line
     def insert_table_vantagens_subs_perfis(self, dados : dict = {}):
@@ -86,43 +86,51 @@ class Setup():
 
     @db.create_or_drop_table
     def create_table_parametros_capboard(self, dados={}):
-        return script_create_table_parametros_capboard()
+        return script_create_table_parametros_capboard(dados)
 
     @db.insert_table_one_line
     def insert_table_parametros_capboard(self, dados : dict = {}):
-        return script_insert_table_parametros_capboard()
+        return script_insert_table_parametros_capboard(dados)
 
     @db.create_or_drop_table
     def create_table_parametros_buddies(self, dados={}):
-        return script_create_table_parametros_buddies()
+        return script_create_table_parametros_buddies(dados)
 
     @db.insert_table_one_line
     def insert_table_parametros_buddies(self, dados : dict = {}):
-        return script_insert_table_parametros_buddies()
+        return script_insert_table_parametros_buddies(dados)
     
     @db.create_or_drop_table
     def create_table_parametros_aventureiros(self, dados={}):
-        return script_create_table_parametros_aventureiros()
+        return script_create_table_parametros_aventureiros(dados)
 
     @db.insert_table_one_line
     def insert_table_parametros_aventureiros(self, dados : dict = {}):
-        return script_insert_table_parametros_aventureiros()
+        return script_insert_table_parametros_aventureiros(dados)
 
     @db.create_or_drop_table
     def create_table_parametros_hordas(self, dados={}):
-        return script_create_table_parametros_hordas()
+        return script_create_table_parametros_hordas(dados)
 
     @db.insert_table_one_line
     def insert_table_parametros_hordas(self, dados : dict = {}):
-        return script_insert_table_parametros_hordas()
+        return script_insert_table_parametros_hordas(dados)
+
+    @db.create_or_drop_table
+    def create_table_parametros_gerais(self, dados={}):
+        return script_create_table_parametros_gerais(dados)
+
+    @db.insert_table_one_line
+    def insert_table_parametros_gerais(self, dados={}):
+        return script_insert_table_parametros_gerais(dados)
 
     @db.create_or_drop_table
     def create_table_parametros_criaturas(self, dados={}):
-        return script_create_table_parametros_criaturas()
+        return script_create_table_parametros_criaturas(dados)
 
     @db.insert_table_one_line
     def insert_table_parametros_criaturas(self, dados={}):
-        return script_insert_table_parametros_criaturas()
+        return script_insert_table_parametros_criaturas(dados)
 
     '''
         ---------------------------------------------------------------------   
@@ -130,44 +138,44 @@ class Setup():
 
     @db.create_or_drop_table
     def create_table_tipos(self, dados : str = ""): 
-        return script_create_table_tipos()
+        return script_create_table_tipos(dados)
 
     @db.insert_table_many_lines
     def insert_table_tipos(self, dados : str = ""):
-        return script_insert_table_tipos()
+        return script_insert_table_tipos(dados)
 
     
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_atributos(self, dados : str = ""): 
-        return script_create_table_atributos()
+        return script_create_table_atributos(dados)
 
     @db.insert_table_many_lines
     def insert_table_atributos(self, dados : str = ""):
-        return script_insert_table_atributos()
+        return script_insert_table_atributos(dados)
 
     
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_efetividades(self, dados : str = ""): 
-        return script_create_table_efetividades()
+        return script_create_table_efetividades(dados)
 
     @db.insert_table_many_lines
     def insert_table_efetividades(self, dados : str = ""):
-        return script_insert_table_efetividades()
+        return script_insert_table_efetividades(dados)
 
     
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_custos(self, dados : str = ""): 
-        return script_create_table_custos()
+        return script_create_table_custos(dados)
 
     @db.insert_table_many_lines
     def insert_table_custos(self, dados : str = ""):
-        return script_insert_table_custos()
+        return script_insert_table_custos(dados)
 
     
     '''----------------------------------------------------------------'''
@@ -175,25 +183,25 @@ class Setup():
 
     @db.create_or_drop_table
     def create_table_criaturas(self, dados : str = ""): 
-        return script_create_table_criaturas()
+        return script_create_table_criaturas(dados)
 
     @db.insert_table_many_lines
     def insert_table_criaturas(self, dados : str = ""):
-        return script_insert_table_criaturas()
+        return script_insert_table_criaturas(dados)
 
     
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_canais(self, dados : str = ""):
-        return script_create_table_canais()
+        return script_create_table_canais(dados)
 
     
     '''----------------------------------------------------------------'''
 
     @db.create_or_drop_table
     def create_table_msg(self, dados : str = ""): 
-        return script_create_table_msg()
+        return script_create_table_msg(dados)
 
 if __name__ == "__main__":
     setup_obj = Setup()
@@ -237,6 +245,9 @@ if __name__ == "__main__":
 
     setup_obj.create_table_parametros_hordas()
     setup_obj.insert_table_parametros_hordas(dados_padrao_tabela_parametros_hordas())
+
+    setup_obj.create_table_parametros_gerais()
+    setup_obj.insert_table_parametros_gerais(dados_padrao_tabela_parametros_gerais())
 
     '''
         ----------------------------------------------------------------------------------------- 

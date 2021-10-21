@@ -58,12 +58,27 @@ class Capcoins(Cog):
                     "aventureiro_id" : _aventureiro_id
                 })  
 
-        _itens_obtidos = await self.db.consulta_itens_obtidos({
+        _itens_obtidos_capshop = await self.db.consulta_itens_obtidos_capshop({
+            "canal_id" : _canal_id,
+            "aventureiro_id" : _aventureiro_id,
+            "nome_idioma" : _nome_idioma,
+        })
+
+        _itens_obtidos_capraid = await self.db.consulta_itens_obtidos_capraid({
             "canal_id" : _canal_id,
             "aventureiro_id" : _aventureiro_id,
             "nome_idioma" : _nome_idioma,
         })
         
+        if _itens_obtidos_capshop == [] and _itens_obtidos_capraid == []:
+            _itens_obtidos = []
+        elif _itens_obtidos_capshop != [] and _itens_obtidos_capraid != []:
+            _itens_obtidos = _itens_obtidos_capshop + _itens_obtidos_capraid
+        elif _itens_obtidos_capshop != []:
+            _itens_obtidos = _itens_obtidos_capshop
+        else:
+            _itens_obtidos = _itens_obtidos_capraid
+
         if _dados_horda["nome_horda"] != "" and _dados_horda["nome_horda"] != "capraid":
             _aventureiro_tabela = [a for a in _dados_horda["aventureiros"] if a["aventureiro_id"] == _aventureiro_id]  
             if _aventureiro_tabela != []:
