@@ -16,16 +16,17 @@ class Envia_Msg(Cog):
         _max_msg_length = dados_aventureiro["parametros_gerais"]["tamanho_max_msgs"]
 
         _whisper = f"""PRIVMSG #{_canal_name} :/w {_author_name} {'-'*38}"""
-        _msg=  f"""{_whisper} {msg}\r\n"""
+        _sufix = "\r\n"
+        _msg=  f"""{_whisper} {msg}{_sufix}"""
         
         while len(_msg) >= _max_msg_length:
             _msg_test = _msg[:_max_msg_length]
             indice = _msg_test.rfind('->')
-            _msg_print = _msg_test[:indice-4] if indice > -1 else _msg_test
+            _msg_print = _msg_test[:indice-len(_sufix)] if indice > -1 else _msg_test
             await self.bot._connection.send(_msg_print)
             self.bot.logger = self.bot.set_logging(_canal_id)
             self.bot.logger.info(self.bot.prepare_log(_msg_print))
-            _msg = _msg[indice-4:]
+            _msg = _msg[indice-len(_sufix):]
             _msg =  f"""{_whisper} {_msg}\r\n"""    
             
         else:
