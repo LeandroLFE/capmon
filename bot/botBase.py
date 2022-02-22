@@ -5,8 +5,9 @@ from twitchio.ext.commands.errors import CommandNotFound
 class BotBase(Bot):
 
     def __init__(self):
-        super().__init__(client_id=client_id, client_secret=client_secret, token=token,
-            nick=nick, prefix=prefix, initial_channels=initial_channels)
+        # super().__init__(client_id=client_id, client_secret=client_secret, token=token,
+        #     nick=nick, prefix=prefix, initial_channels=initial_channels)
+        super().__init__(token=token, prefix=prefix, initial_channels=initial_channels)
 
     async def event_error(self, error: Exception, data: str):
         self.logger = self.set_logging("errors")
@@ -77,3 +78,7 @@ class BotBase(Bot):
         
         except Exception as e:
             return
+
+if __name__ == "__main__":
+    bot = Bot()   
+    bot.run()
