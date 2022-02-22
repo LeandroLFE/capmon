@@ -17,11 +17,9 @@ dados_padrao_tabela_custos = lambda dados = {} : [
                                                 (1,'common', 1, 1),
                                                 (2,'uncommon', 1, 2),
                                                 (3,'rare', 1, 3),
-                                                (4,'n/a', 1, 4),
                                                 (5,'legendary', 1, 5),
                                                 (6,'comum', 2, 1),
                                                 (7,'incomum', 2, 2),
                                                 (8,'rara', 2, 3),
-                                                (9,'n/a', 2, 4),
                                                 (10,'lendaria', 2, 5)
                                                 ]
