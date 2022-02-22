@@ -12,4 +12,6 @@ def capshop_items_msg(dados):
 
 wait_for_user_to_buy = lambda dados = {} : f"Digite #capbuy #num para comprar, #capend para finalizar a sessão {'_' * 50} \r\n"
 
+purchase_item = lambda dados = {} : f"""{dados["aventureiro_id"]} adquiriu o """
+
 end_session = lambda dados = {} : "Sessao encerrada do Capshop, inicie uma nova com !capshop no chat da live"
