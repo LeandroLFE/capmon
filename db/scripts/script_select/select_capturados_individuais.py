@@ -1,130 +1,190 @@
-# Requer nome_aventureiro e tipo = {"nome_aventureiro":str, "tipo": int} 
-select_capturados_tipo_individuais = lambda dados = {} : f"""
-    Select Criaturas.num, Criaturas.nome, capturados.CP, atributo, capturados.especial, 
-    capturados.cont_capturados, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
-    Criaturas.CP_Min, Criaturas.CP_Max, Criaturas.atributo1, Criaturas.atributo2, 
-    Criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, Criaturas.CP_limite, 
-    Criaturas.Evolui, capturados.aventureiro_index, capturados.Golpe, capturados.Origem 
-    FROM (
-    SELECT capturados.Aventureiro_index, capturados.ID_Criatura, capturados.CP, 
-    atributos.Nome_{dados["idioma"]} as atributo, atributos.tipo, capturados.especial, 
-    capturados.cont_capturados, capturados.Golpe, capturados.Origem 
-    FROM capturados_{dados["nome_canal"]} AS capturados 
-    INNER JOIN atributos 
-    ON capturados.Golpe = atributos.Id 
-    WHERE aventureiro_index = ( 
-    SELECT aventureiro_index 
-    FROM aventureiros_{dados["nome_canal"]} 
-    WHERE nome = :nome_aventureiro
-    ) 
-    ) as capturados 
-    INNER JOIN ( 
-    SELECT Criaturas.num, Criaturas.tipo, Criaturas.nome, Criaturas.forma, 
-    Criaturas.linha_evolutiva, Criaturas.CP_Min, Criaturas.CP_Max, 
-    Criaturas.atributo1, Criaturas.atributo2, Criaturas.chance_especial, 
-    Criaturas.custo, Criaturas.evolucao, Criaturas.CP_limite, Criaturas.Evolui 
-    FROM criaturas 
-    Where tipo = :tipo
-    ) as criaturas 
-    ON capturados.id_criatura = Criaturas.num 
-    ORDER BY Criaturas.custo DESC, capturados.CP DESC 
 """
-# Requer atributo, nome_aventureiro e tipo = {"atributo": int, "nome_aventureiro": str, "tipo": int}
+Requer :
+{
+  "canal_id": str,
+  "aventureiro_id":str,
+  "nome_idioma" : str, 
+  "tipo": int
+}
+""" 
+select_capturados_tipo_individuais = lambda dados : f"""
+    Select Aventureiros.aventureiro_id, 
+    Capturados.num, Capturados.nome, Capturados.cp, capturados.especial, 
+    Capturados.tipo, Capturados.forma, Capturados.linha_evolutiva, 
+    Capturados.cp_min, Capturados.cp_max, 
+    Capturados.atributo1, Capturados.atributo2,
+    Capturados.chance_especial , Capturados.custo, Capturados.nome_custo,
+    Capturados.evolucao, Capturados.cp_limite, 
+    Capturados.evolui, Capturados.golpe, Capturados.origem 
+    FROM ( 
+            SELECT aventureiro_id 
+            FROM Aventureiros_{dados["canal_id"]} as Aventureiros 
+            WHERE Aventureiros.aventureiro_id = :aventureiro_id
+        ) as Aventureiros 
+    INNER JOIN 
+    ( 
+        SELECT Capturados.aventureiro_id, Capturados.CP, Capturados.especial,
+        Capturados.Golpe, Capturados.Origem, 
+        Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+        Criaturas.CP_Min, Criaturas.CP_Max, 
+        Criaturas.atributo1, Criaturas.atributo2, 
+        Parametros_criaturas.chance_especial , Criaturas.custo, Custos.nome as nome_custo,
+        Criaturas.evolucao, 
+        Criaturas.CP_limite, Criaturas.Evolui 
+        FROM Capturados_{dados["canal_id"]} as Capturados 
+        INNER JOIN Criaturas 
+        ON capturados.ID_Criatura = Criaturas.num
+        INNER JOIN Parametros_criaturas
+        ON Criaturas.parametro_criatura = Parametros_criaturas.id
+        INNER JOIN Custos 
+        ON Criaturas.custo = Custos.ref
+        INNER JOIN Idiomas 
+        ON Custos.idioma = Idiomas.id
+        WHERE LOWER(Idiomas.nome) = LOWER(:nome_idioma)      
+    ) as Capturados 
+    ON aventureiros.aventureiro_id = Capturados.aventureiro_id 
+    WHERE Capturados.tipo = :tipo 
+    ORDER BY Capturados.custo DESC, capturados.CP DESC ;
+"""
+
+"""
+Requer:
+    { 
+        "canal_id" : str,
+        "aventureiro_id": str, 
+        "nome_idioma" : str, 
+        "atributo": int,
+    }
+"""
 select_capturados_atributo_individuais = lambda dados : f"""
-    Select Criaturas.num, Criaturas.nome, capturados.CP, atributo, capturados.especial, 
-    capturados.cont_capturados, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
-    Criaturas.CP_Min, Criaturas.CP_Max, Criaturas.atributo1, Criaturas.atributo2, 
-    Criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, Criaturas.CP_limite, 
-    Criaturas.Evolui, capturados.aventureiro_index, capturados.Golpe, capturados.Origem 
+    Select Capturados.aventureiro_id, 
+    Criaturas.num, Criaturas.nome, Capturados.cp, capturados.especial, 
+    Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Criaturas.atributo1, Criaturas.atributo2,
+    Criaturas.chance_especial , Criaturas.custo, Custos.nome as nome_custo,
+    Criaturas.evolucao, Criaturas.cp_limite, 
+    Criaturas.evolui, Capturados.golpe, Capturados.origem 
     FROM (
-    SELECT capturados.Aventureiro_index, capturados.ID_Criatura, capturados.CP, 
-    atributos.Nome_{dados["idioma"]} as atributo, capturados.especial, capturados.cont_capturados, 
-    capturados.Golpe, capturados.Origem 
-    FROM capturados_{dados["nome_canal"]} AS capturados 
-    INNER JOIN atributos 
-    ON capturados.Golpe = atributos.Id 
-    WHERE aventureiro_index = ( 
-    SELECT aventureiro_index 
-    FROM aventureiros_{dados["nome_canal"]} 
-    WHERE nome = :nome_aventureiro
-    ) 
+        SELECT capturados.aventureiro_id, capturados.ID_Criatura, capturados.CP, capturados.especial,
+        capturados.Golpe, capturados.Origem 
+        FROM Capturados_{dados["canal_id"]} AS capturados 
+        INNER JOIN atributos 
+        ON capturados.Golpe = atributos.Id 
+        WHERE aventureiro_id = :aventureiro_id
     ) as capturados 
     INNER JOIN ( 
-    SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
-    Criaturas.CP_Min, Criaturas.CP_Max, Criaturas.atributo1, Criaturas.atributo2, 
-    Criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, 
-    Criaturas.CP_limite, Criaturas.Evolui 
-    FROM criaturas 
-    Where atributo1 = :atributo
-    Or atributo2 = :atributo
-    ) as criaturas 
-    ON capturados.id_criatura = Criaturas.id 
-    ORDER BY Criaturas.custo DESC, capturados.CP DESC 
+        SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+        Criaturas.CP_Min, Criaturas.CP_Max, 
+        Criaturas.atributo1, Criaturas.atributo2, 
+        Parametros_criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, 
+        Criaturas.CP_limite, Criaturas.Evolui 
+        FROM Criaturas 
+        INNER JOIN Parametros_criaturas
+        ON Criaturas.parametro_criatura = Parametros_criaturas.id 
+        Where atributo1 = :atributo
+        Or atributo2 = :atributo
+    ) as Criaturas 
+    ON Capturados.id_criatura = Criaturas.num
+    INNER JOIN Custos 
+    ON Criaturas.custo = Custos.ref
+    INNER JOIN Idiomas 
+    ON Custos.idioma = Idiomas.id
+    WHERE LOWER(Idiomas.nome) = LOWER(:nome_idioma)
+    ORDER BY Criaturas.custo DESC, Capturados.CP DESC ;
 """
-# Requer nome_aventureiro e raridade = {"nome_aventureiro":str, "raridade": int}
-select_capturados_raridade_individuais = lambda dados = {} :f"""
-    Select Criaturas.num, Criaturas.nome, capturados.CP, atributo, capturados.especial, 
-    capturados.cont_capturados, Criaturas.tipo, Criaturas.forma, 
-    Criaturas.linha_evolutiva, Criaturas.CP_Min, Criaturas.CP_Max, 
-    Criaturas.atributo1, Criaturas.atributo2, Criaturas.chance_especial, 
-    Criaturas.custo, Criaturas.evolucao, Criaturas.CP_limite, Criaturas.Evolui, 
-    capturados.aventureiro_index, capturados.Golpe, capturados.Origem 
+
+"""
+Requer:
+    { 
+        "canal_id" : str,
+        "aventureiro_id": str, 
+        "nome_idioma" : str, 
+        "raridade": int,
+    }
+"""
+select_capturados_raridade_individuais = lambda dados : f"""
+    Select Capturados.aventureiro_id, 
+    Criaturas.num, Criaturas.nome, Capturados.cp, capturados.especial, 
+    Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Criaturas.atributo1, Criaturas.atributo2, 
+    Criaturas.chance_especial , Criaturas.custo, Custos.nome as nome_custo, 
+    Criaturas.evolucao, Criaturas.cp_limite, 
+    Criaturas.evolui, Capturados.golpe, Capturados.origem 
     FROM (
-    SELECT capturados.Aventureiro_index, capturados.ID_Criatura, capturados.CP, 
-    atributos.Nome_{dados["idioma"]} as atributo, capturados.especial, 
-    capturados.cont_capturados, capturados.Golpe, capturados.Origem 
-    FROM capturados_{dados["nome_canal"]} AS capturados 
-    INNER JOIN atributos 
-    ON capturados.Golpe = atributos.ID 
-    WHERE aventureiro_index = ( 
-    SELECT aventureiro_index 
-    FROM aventureiros_{dados["nome_canal"]} 
-    WHERE nome = :nome_aventureiro
-    ) 
-    ) as capturados 
+        SELECT Capturados.aventureiro_id, Capturados.ID_Criatura, Capturados.CP, 
+        Capturados.especial, Capturados.Golpe, Capturados.Origem 
+        FROM Capturados_{dados["canal_id"]} AS capturados 
+        INNER JOIN Atributos 
+        ON capturados.Golpe = Atributos.ID 
+        WHERE aventureiro_id = :aventureiro_id
+    ) as Capturados 
     INNER JOIN ( 
-    SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, 
-    Criaturas.linha_evolutiva, Criaturas.CP_Min, Criaturas.CP_Max, 
-    Criaturas.atributo1, Criaturas.atributo2, Criaturas.chance_especial , Criaturas.custo, 
-    Criaturas.evolucao, Criaturas.CP_limite, Criaturas.Evolui 
-    FROM criaturas 
-    Where custo = :raridade
-    ) as criaturas 
-    ON capturados.id_criatura = Criaturas.id 
+        SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+        Criaturas.CP_Min, Criaturas.CP_Max, 
+        Criaturas.atributo1, Criaturas.atributo2, 
+        Parametros_criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, 
+        Criaturas.CP_limite, Criaturas.Evolui 
+        FROM Criaturas 
+        INNER JOIN Parametros_criaturas
+        ON Criaturas.parametro_criatura = Parametros_criaturas.id 
+        Where custo = :raridade
+    ) as Criaturas 
+    ON capturados.id_criatura = Criaturas.num 
+    INNER JOIN Custos 
+    ON Criaturas.custo = Custos.ref
+    INNER JOIN Idiomas 
+    ON Custos.idioma = Idiomas.id
+    WHERE LOWER(Idiomas.nome) = LOWER(:nome_idioma)
     ORDER BY Criaturas.custo DESC, capturados.CP DESC
 """
 
-# Requer nome_aventureiro = {"nome_aventureiro":str}
-select_capturados_especial_individuais = lambda dados = {} : f"""
-    Select Criaturas.num, Criaturas.nome, capturados.CP, atributo, capturados.especial, 
-    capturados.cont_capturados, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
-    Criaturas.CP_Min, Criaturas.CP_Max, Criaturas.atributo1, Criaturas.atributo2, 
-    Criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, Criaturas.CP_limite, 
-    Criaturas.Evolui, capturados.aventureiro_index, capturados.Golpe, capturados.Origem 
+"""
+Requer:
+    { 
+        "canal_id" : str,
+        "aventureiro_id": str, 
+        "nome_idioma" : str, 
+    }
+"""
+select_capturados_especial_individuais = lambda dados : f"""
+    Select Capturados.aventureiro_id, 
+    Criaturas.num, Criaturas.nome, Capturados.cp, capturados.especial, 
+    Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+    Criaturas.cp_min, Criaturas.cp_max, 
+    Criaturas.atributo1, Criaturas.atributo2, 
+    Criaturas.chance_especial , Criaturas.custo, Custos.nome as nome_custo, Criaturas.evolucao, Criaturas.cp_limite, 
+    Criaturas.evolui, Capturados.golpe, Capturados.origem 
     FROM (
-    SELECT capturados.Aventureiro_index, capturados.ID_Criatura, capturados.CP, 
-    atributos.Nome_{dados["idioma"]} as atributo, capturados.especial, capturados.cont_capturados, 
-    capturados.Golpe, capturados.Origem 
-    FROM capturados_{dados["nome_canal"]} AS capturados 
-    INNER JOIN atributos 
-    ON capturados.Golpe = atributos.Id 
-    WHERE aventureiro_index = ( 
-    SELECT aventureiro_index 
-    FROM aventureiros_{dados["nome_canal"]} 
-    WHERE nome = :nome_aventureiro 
-    ) 
-    AND capturados.especial = "1" 
+        SELECT capturados.aventureiro_id, capturados.ID_Criatura, capturados.CP, 
+        capturados.especial,
+        capturados.Golpe, capturados.Origem 
+        FROM Capturados_{dados["canal_id"]} AS capturados 
+        INNER JOIN atributos 
+        ON capturados.Golpe = atributos.Id 
+        WHERE aventureiro_id = :aventureiro_id
+        AND capturados.especial = "1" 
     ) as capturados 
     INNER JOIN ( 
-    SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
-    Criaturas.CP_Min, Criaturas.CP_Max, Criaturas.atributo1, Criaturas.atributo2, 
-    Criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, 
-    Criaturas.CP_limite, Criaturas.Evolui 
-    FROM criaturas 
+        SELECT Criaturas.num, Criaturas.nome, Criaturas.tipo, Criaturas.forma, Criaturas.linha_evolutiva, 
+        Criaturas.CP_Min, Criaturas.CP_Max, 
+        Criaturas.atributo1, Criaturas.atributo2
+        Parametros_criaturas.chance_especial , Criaturas.custo, Criaturas.evolucao, 
+        Criaturas.CP_limite, Criaturas.Evolui 
+        FROM criaturas 
+        INNER JOIN Parametros_criaturas
+        ON Criaturas.parametro_criatura = Parametros_criaturas.id 
     ) as criaturas 
     ON capturados.id_criatura = Criaturas.num 
-    ORDER BY Criaturas.custo DESC, capturados.CP DESC 
+    INNER JOIN Custos 
+    ON Criaturas.custo = Custos.ref
+    INNER JOIN Idiomas 
+    ON Custos.idioma = Idiomas.id
+    WHERE LOWER(Idiomas.nome) = LOWER(:nome_idioma)
+    ORDER BY Criaturas.custo DESC, capturados.CP DESC  
 """
+
 
 # Requer id_aventureiro e num_criatura = {"id_aventureiro":int, "num_criatura" : int}
 select_capturados_aventureiros = lambda dados : f"""
