@@ -7,6 +7,7 @@ from db.default_data.dados_tipos import script_create_table_tipos, script_insert
 from db.default_data.dados_idiomas import script_create_table_idiomas, script_insert_table_idiomas, dados_padrao_tabela_idiomas
 from db.default_data.dados_tipo_itens import script_create_table_tipo_itens
 from db.default_data.dados_custos import script_create_table_custos, script_insert_table_custos, dados_padrao_tabela_custos
+from db.default_data.dados_especiais import script_create_table_especiais, script_insert_table_especiais, dados_padrao_tabela_especiais
 from db.default_data.dados_comandos_uso_itens_capshop import script_create_table_comandos_uso_itens_capshop, script_insert_table_comandos_uso_itens_capshop, dados_padrao_tabela_comandos_uso_itens_capshop
 from db.default_data.dados_itens_capshop import script_create_table_itens_capshop, script_insert_table_itens_capshop, dados_padrao_tabela_itens_capshop
 from db.default_data.dados_itens_capraid import script_create_table_itens_capraid, script_insert_table_itens_capraid, dados_padrao_tabela_itens_capraid
@@ -180,6 +181,19 @@ class Setup():
     
     '''----------------------------------------------------------------'''
 
+    '''----------------------------------------------------------------'''
+
+    @db.create_or_drop_table
+    def create_table_especiais(self, dados : str = ""): 
+        return script_create_table_especiais(dados)
+
+    @db.insert_table_many_lines
+    def insert_table_especiais(self, dados : str = ""):
+        return script_insert_table_especiais(dados)
+
+    
+    '''----------------------------------------------------------------'''
+
 
     @db.create_or_drop_table
     def create_table_criaturas(self, dados : str = ""): 
@@ -264,6 +278,9 @@ if __name__ == "__main__":
 
     setup_obj.create_table_custos()
     setup_obj.insert_table_custos(dados_padrao_tabela_custos())
+
+    setup_obj.create_table_especiais()
+    setup_obj.insert_table_especiais(dados_padrao_tabela_especiais())
 
     setup_obj.create_table_criaturas()
     setup_obj.insert_table_criaturas(dados_padrao_tabela_criaturas())
