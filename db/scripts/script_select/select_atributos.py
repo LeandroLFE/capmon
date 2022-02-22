@@ -7,10 +7,12 @@ select_atributos_criatura = lambda dados = {} : """
 """
 
 select_all_ref_atributos = lambda dados = {} : """
-    SELECT Distinct ref 
+    SELECT Atributos.ref, Atributos.nome, Idiomas.nome as nome_idioma 
     FROM atributos
+    INNER JOIN Idiomas
+    ON Atributos.idioma = Idiomas.id
 """
-# Requer tipo e ref = {"tipo": int, "ref":int}
+# Requer nome_tipo, nome_idioma e ref_atributo = {"nome_tipo": str, "nome_idioma": str, "ref_atributo":int}
 select_atributos_ref = lambda dados = {} : """
     SELECT Atributos.nome 
     FROM Atributos 
@@ -18,14 +20,13 @@ select_atributos_ref = lambda dados = {} : """
     ON Atributos.idioma = Idiomas.id
     INNER JOIN Tipos
     ON Atributos.tipo = Tipos.id
-    WHERE Tipos.nome = :nome_tipo
-    AND Idiomas.nome = :nome_idioma
+    WHERE LOWER(Tipos.nome) = LOWER(:nome_tipo)
+    AND LOWER(Idiomas.nome) = LOWER(:nome_idioma)
     AND ref = :ref_atributo 
 """
-# Requer tipo = {"tipo": int}
+# Requer tipo = {"nome_tipo": str}
 select_atributos_tipo = lambda dados = {} : """
-    SELECT Distinct id, Nome, Idioma, tipo, Ref 
-    FROM atributos 
-    WHERE tipo = :tipo
+    SELECT ref, idioma, nome, tipo
+    FROM Atributos
+    WHERE LOWER(nome) = LOWER(:nome_tipo)
 """
-
