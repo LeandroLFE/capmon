@@ -8,7 +8,7 @@ async def capaventura_language(self, ctx, _opt):
 
     _idioma_valido = [i["nome"] for i in self.idiomas if i["nome"] == _opt]
 
-    if aventureiro == None or aventureiro["ativo"] == 0 or _idioma_valido == []:
+    if aventureiro is None or aventureiro["ativo"] == 0 or _idioma_valido == []:
         self.error_messages = self.bot.import_message_language_by_one("english", 
             "bot_channel", "capmon_channel_messages", "capmon_channel_messages_error", 
             {
@@ -17,7 +17,7 @@ async def capaventura_language(self, ctx, _opt):
                 "comandos": self.start_parameter_list() + self.language_parameter_list() + self.stop_parameter_list()    
             })
 
-        if aventureiro == None:
+        if aventureiro is None:
             await self.envia_msg_with_context(ctx, self.error_messages["language_stop"])
         elif  aventureiro["ativo"] == 0:
             await self.envia_msg_with_context(ctx, self.error_messages["language_inactive"])

@@ -17,7 +17,7 @@ class Envia_Msg(Cog):
 
         _whisper = f"""PRIVMSG #{_canal_name} :/w {_author_name} {'-'*38}"""
         _msg=  f"""{_whisper} {msg}\r\n"""
-
+        
         while len(_msg) >= _max_msg_length:
             _msg_test = _msg[:_max_msg_length]
             indice = _msg_test.rfind('->')
@@ -51,15 +51,15 @@ class Envia_Msg(Cog):
 
         _ultima_msg = _ultima_msg["msg"] if issubclass(type(_ultima_msg), dict) else _ultima_msg
 
-        if _ultima_msg != None and type(_ultima_msg) != str:
+        if _ultima_msg is not None and type(_ultima_msg) != str:
             self.bot.logger = self.bot.set_logging(parametros["canal_id"])
             self.bot.logger.warning(f"Tipo errado ultima_msg: {type(_ultima_msg)}")
             return
 
-        if _ultima_msg == None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
+        if _ultima_msg is None or (self.bot.remover_acentos(msg) != self.bot.remover_acentos(_ultima_msg)):
             msg = f"""╠{"─"*30}╣ {msg} ╠{"─"*30}╣"""
             await ctx.send(msg)
-            await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)
+            await self.db.insert_ultima_msg(parametros) if _ultima_msg is None else await self.db.update_ultima_msg(parametros)
         else:
             data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')
@@ -82,9 +82,9 @@ class Envia_Msg(Cog):
 
         _ultima_msg = await self.db.consulta_ultima_msg(parametros)
 
-        if _ultima_msg == None or (self.bot.remover_acentos(_msg) != self.bot.remover_acentos(_ultima_msg)):
+        if _ultima_msg is None or (self.bot.remover_acentos(_msg) != self.bot.remover_acentos(_ultima_msg)):
             await self.bot._connection.send(_msg)
-            await self.db.insert_ultima_msg(parametros) if _ultima_msg == None else await self.db.update_ultima_msg(parametros)    
+            await self.db.insert_ultima_msg(parametros) if _ultima_msg is None else await self.db.update_ultima_msg(parametros)    
         else:
             data_e_hora_atuais = self.bot.datetime.now()
             data_e_hora_em_texto = data_e_hora_atuais.strftime('%H:%M:%S')

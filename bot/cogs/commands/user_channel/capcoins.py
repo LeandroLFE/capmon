@@ -29,7 +29,7 @@ class Capcoins(Cog):
                 "aventureiro_nome" : _aventureiro_nome
             })
 
-            if _aventureiro == None:
+            if _aventureiro is None:
                 self.message = self.bot.import_message_language_by_one(_nome_idioma,
                                                                 "user_channel", "capcoins_messages", "person_not_found",
                                                                 {})
@@ -47,7 +47,7 @@ class Capcoins(Cog):
                 "aventureiro_id" : _aventureiro_id
             })
 
-            if _capcoins == None:
+            if _capcoins is None:
                 await self.db.insert_aventureiro({
                     "canal_id": _canal_id,
                     "aventureiro_id": _aventureiro_id,
@@ -141,7 +141,7 @@ class Capcoins(Cog):
                     "canal_id" : _canal_id,
                     "aventureiro_nome" : _aventureiro_nome
                 })
-                if _aventureiro == None:
+                if _aventureiro is None:
                     self.message = self.bot.import_message_language_by_one(_nome_idioma,
                                                                     "user_channel", "capcoins_messages", "person_not_found",
                                                                     {})
@@ -153,7 +153,7 @@ class Capcoins(Cog):
                     "aventureiro_nome" : _aventureiro_nome
                 })
 
-            if _aventureiro == None:
+            if _aventureiro is None:
                 self.message = self.bot.import_message_language_by_one(_nome_idioma,
                                                                 "user_channel", "capcoins_messages", "person_not_found",
                                                                 {})

@@ -25,9 +25,9 @@ class BotBase(Bot):
                 return
         
         except Exception as e:
-            if message == None:
+            if message is None:
                 return
-            if message.author == None:
+            if message.author is None:
                 return
             self.logger = self.set_logging("errors")
             self.logger.error(f"Event message error: {e.args}")

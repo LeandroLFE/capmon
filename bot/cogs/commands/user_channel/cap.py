@@ -26,7 +26,7 @@ class Cap(Cog):
             "aventureiro_id": _aventureiro_id
         })
 
-        if _aventureiro == None:
+        if _aventureiro is None:
             await self.db.insert_aventureiro({
                 "canal_id": _canal_id,
                 "aventureiro_id": _aventureiro_id,
@@ -122,7 +122,7 @@ class Cap(Cog):
 
         _ja_capturou_antes = True
 
-        if _criatura_ja_capturada == None:
+        if _criatura_ja_capturada is None:
             _ja_capturou_antes = False
             _criatura_ja_capturada = {
                 "cp": 0,
@@ -220,7 +220,7 @@ class Cap(Cog):
                 "abreviacao": _item_usado,
             })
 
-            if _item != None:
+            if _item is not None:
                 _dados_aventureiro["item_utilizado"] = _item
                 _chance_captura += _item["valor_do_efeito"] if "chance" in _item["nome"].lower(
                 ) else 0
@@ -263,7 +263,7 @@ class Cap(Cog):
                     _sorteio_especial = self.bot.random_randint(1, 100)
 
             _atributo = self.bot.random_choice([_dados_horda["criatura"]["nome_atributo1"], _dados_horda["criatura"]["nome_atributo2"]
-                                                ]) if _dados_horda["criatura"]["nome_atributo2"] != None else _dados_horda["criatura"]["nome_atributo1"]
+                                                ]) if _dados_horda["criatura"]["nome_atributo2"] is not None else _dados_horda["criatura"]["nome_atributo1"]
 
             _cp = _dados_horda["criatura_ja_capturada"]["cp"] + (self.bot.random_randint(
                 _dados_horda["criatura"]["cp_min"] * 0.1, _dados_horda["criatura"]["cp_max"] * 0.1)) if _ja_capturou_antes else _parametros_criatura["cp_inicial"]

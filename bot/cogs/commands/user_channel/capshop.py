@@ -47,7 +47,7 @@ class Capshop(Cog):
             "parametros_gerais" : _parametros_gerais
         }        
 
-        if _aventureiro == None:
+        if _aventureiro is None:
             await self.db.insert_aventureiro(_dados_aventureiro)
             _aventureiro = await self.db.consulta_aventureiro(_dados_aventureiro)
 
@@ -132,7 +132,7 @@ class Capshop(Cog):
         _aventureiro_id = dados_aventureiro["aventureiro_id"]
         _nome_idioma = self.bot.sessao_ativa[_aventureiro_id]["dados"]["nome_idioma"] if _aventureiro_id in self.bot.sessao_ativa.keys() else None
 
-        if _nome_idioma == None:
+        if _nome_idioma is None:
             return   
 
         future.cancel()

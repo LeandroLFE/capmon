@@ -6,7 +6,7 @@ async def capaventura_stop(self, ctx):
         "canal_id" : _canal_id
     })
 
-    if aventureiro == None or aventureiro["ativo"] == 0:
+    if aventureiro is None or aventureiro["ativo"] == 0:
         self.error_messages = self.bot.import_message_language_by_one("english", 
             "bot_channel", "capmon_channel_messages", "capmon_channel_messages_error", 
             {
@@ -15,7 +15,7 @@ async def capaventura_stop(self, ctx):
                 "comandos": self.start_parameter_list() + self.language_parameter_list() + self.stop_parameter_list()    
             })
 
-        if aventureiro == None:
+        if aventureiro is None:
             await self.envia_msg_with_context(ctx, self.error_messages["stop_not_start"])
         else:
             await self.envia_msg_with_context(ctx, self.error_messages["stop_inactive"])

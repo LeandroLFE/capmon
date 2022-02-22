@@ -18,13 +18,13 @@ async def capaventura_start(self, ctx, idioma_canal):
             "canal_id" : dados["canal_id"]
         })
 
-        if canal == None or canal["ativo"] == 0:
+        if canal is None or canal["ativo"] == 0:
 
             self.messages = self.bot.import_message_language_by_one(dados["nome_idioma"], 
             "bot_channel", "capmon_channel_messages", "capmon_channel_messages_normal", 
             {"aventureiro":_aventureiro})
 
-            await self.db.insert_canais(dados) if canal == None else await self.db.update_canais(dados)
+            await self.db.insert_canais(dados) if canal is None else await self.db.update_canais(dados)
             await self.db.create_tables_with_underline_adventurer_name(dados)
             await self.db.insert_aventureiro(dados)
             await self.db.insert_tipo_hordas_canal(self.dados_padrao_tabela_tipo_hordas(dados))
