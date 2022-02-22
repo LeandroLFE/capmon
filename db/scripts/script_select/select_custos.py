@@ -1,5 +1,7 @@
 select_all_ref_custos = lambda dados = {}: """
-    SELECT Distinct ref
+    SELECT Custos.nome, Custos.ref, Idiomas.nome as nome_idioma 
     FROM Custos
-    WHERE nome <> 'n/a' 
+    INNER JOIN Idiomas
+    ON Custos.idioma = Idiomas.id
+    ORDER BY Custos.ref DESC
 """
