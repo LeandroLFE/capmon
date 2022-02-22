@@ -7,6 +7,7 @@ from bot.cogs.commands.bot_channel.capaventura import Capaventura
 from bot.cogs.commands.user_channel.cap import Cap
 from bot.cogs.commands.user_channel.capcoins import Capcoins
 from bot.cogs.commands.user_channel.capshop import Capshop
+from bot.cogs.commands.user_channel.capmon import Capmon
 from bot.cogs.commands.whispers.capend import Capend
 from bot.cogs.commands.whispers.capbuy import Capbuy
 
@@ -18,6 +19,7 @@ cogs.append(GeraHordas)
 cogs.append(Capaventura)
 cogs.append(Cap)
 cogs.append(Capcoins)
+cogs.append(Capmon)
 cogs.append(Capshop)
 cogs.append(Capbuy)
 cogs.append(Capend)
@@ -29,7 +31,4 @@ def prepare(bot: Bot, cogs: list):
 if __name__ == "__main__":
     bot = Bot()   
     prepare(bot, cogs)
-    try:
-        bot.run()
-    except Exception as e:
-        print(f"Erro inesperado : {e}")
+    bot.run()
